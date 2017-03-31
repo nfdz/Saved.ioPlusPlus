@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="activity_horizontal_padding">16dp</dimen>
+    <dimen name="activity_vertical_padding">16dp</dimen>
+    <dimen name="fab_add_margin">16dp</dimen>
+    <dimen name="favicon_size">40dp</dimen>
+    <dimen name="favicon_padding">5dp</dimen>
+</resources>

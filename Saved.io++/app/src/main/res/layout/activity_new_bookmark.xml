@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <include layout="@layout/app_bar" />
+
+    <ProgressBar
+        android:id="@+id/pb_new_bookmark_loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="invisible"/>
+
+    <ScrollView
+        android:id="@+id/layout_new_bookmark_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:paddingRight="@dimen/activity_horizontal_padding"
+        android:paddingLeft="@dimen/activity_horizontal_padding"
+        android:paddingTop="@dimen/activity_vertical_padding"
+        android:paddingBottom="@dimen/activity_vertical_padding" >
+
+        <include
+            layout="@layout/bookmark_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </ScrollView>
+</FrameLayout>

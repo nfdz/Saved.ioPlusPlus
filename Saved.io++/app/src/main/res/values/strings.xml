@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Saved.io++</string>
+
+    <string name="main_nav_drawer_open">Open bookmark lists menu</string>
+    <string name="main_nav_drawer_close">Close bookmark lists menu</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
