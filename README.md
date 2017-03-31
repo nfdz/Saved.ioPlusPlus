@@ -6,13 +6,14 @@ Android application for the bookmarking tool https://saved.io/
   <img src="dev/logo.png?raw=true" alt="Saved.io++"/>
 </p>
 
-## TODOs
+## TODO
 
 * Implement settings.
 * Implement notifications.
 * Implement sync service.
 * Implement api rest with retrofit and gson.
 * Pin up bookmarks.
+* Widget with pinned up bookmarks.
 * Initial dialog about privacy and open source.
 * Show date.
 

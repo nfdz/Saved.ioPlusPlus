@@ -20,7 +20,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'SAVEDIO_API_DEV_KEY', '"YOUR_API"'
+        it.buildConfigField 'String', 'SAVEDIO_API_DEV_KEY', '"YOUR_API_DEV_KEY"'
     }
 }
 
