@@ -20,7 +20,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_logo"
-            android:visibility="invisible"/>
+            android:layout_gravity="center"/>
 
     </android.support.v7.widget.Toolbar>
 

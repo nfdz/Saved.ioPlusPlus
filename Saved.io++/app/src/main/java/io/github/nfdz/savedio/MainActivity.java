@@ -124,12 +124,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        ToolbarUtils.centerLogo(mToolbar, mLogo);
-        super.onWindowFocusChanged(hasFocus);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         mRealm.close();

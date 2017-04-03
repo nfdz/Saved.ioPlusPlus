@@ -89,12 +89,6 @@ public class NewBookmarkActivity extends AppCompatActivity {
         mRealm.close();
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        ToolbarUtils.centerLogo(mToolbar, mLogo);
-        super.onWindowFocusChanged(hasFocus);
-    }
-
     private void showLoading() {
         mSaveLoading.setVisibility(View.VISIBLE);
         mContent.setVisibility(View.INVISIBLE);

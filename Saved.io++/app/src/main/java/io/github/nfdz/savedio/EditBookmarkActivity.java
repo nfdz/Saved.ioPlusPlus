@@ -88,12 +88,6 @@ public class EditBookmarkActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        ToolbarUtils.centerLogo(mToolbar, mLogo);
-        super.onWindowFocusChanged(hasFocus);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         mBookmarkUrl.removeTextChangedListener(mUrlValidator);
