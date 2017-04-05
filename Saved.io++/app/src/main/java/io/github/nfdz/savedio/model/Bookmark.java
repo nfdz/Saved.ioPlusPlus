@@ -18,6 +18,7 @@ public class Bookmark extends RealmObject {
     public static final String FIELD_NOTE = "mNotes";
     public static final String FIELD_DATE = "mDate";
     public static final String FIELD_LIST = "mListName";
+    public static final String FIELD_FAVORITE = "mIsFavorite";
 
     @PrimaryKey
     private String mId;
@@ -31,6 +32,8 @@ public class Bookmark extends RealmObject {
     private String mDate;
 
     private String mListName;
+
+    private boolean mIsFavorite;
 
     public void setId(String id) {
         mId = id;
@@ -56,6 +59,10 @@ public class Bookmark extends RealmObject {
         mListName = listName;
     }
 
+    public void setFavorite(boolean isFavorite) {
+        mIsFavorite = isFavorite;
+    }
+
     public String getId() {
         return mId;
     }
@@ -78,5 +85,9 @@ public class Bookmark extends RealmObject {
 
     public String getListName() {
         return mListName;
+    }
+
+    public boolean isFavorite() {
+        return mIsFavorite;
     }
 }

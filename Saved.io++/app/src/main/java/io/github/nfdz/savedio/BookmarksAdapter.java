@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,8 +37,9 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
      * The interface to be implemented to receive on click events.
      */
     public interface BookmarkOnClickHandler {
-        void onClick(Bookmark bookmark);
-        void onLongClick(Bookmark bookmark);
+        void onFavoriteClick(Bookmark bookmark);
+        void onBookmarkClick(Bookmark bookmark);
+        void onLongBookmarkClick(Bookmark bookmark);
     }
 
     /**
@@ -67,7 +69,10 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
     public void onBindViewHolder(BookmarksViewHolder holder, int position) {
         Bookmark bookmark = getItem(position);
         holder.mBookmarkName.setText(bookmark.getTitle());
-
+        Drawable favoriteDrawable = bookmark.isFavorite() ?
+                ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_on)
+              : ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_off);
+        holder.mFavoriteButton.setImageDrawable(favoriteDrawable);
         String faviconPath = getFaviconPath(bookmark.getUrl());
         // add no poster art meanwhile Picasso is loading the poster
         Drawable noFavicon = ContextCompat.getDrawable(mContext, R.drawable.art_no_favicon);
@@ -104,35 +109,48 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
     /**
      * Cache of the children views for a bookmark list item.
      */
-    public class BookmarksViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener, View.OnLongClickListener {
+    public class BookmarksViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mBookmarkName;
         public final ImageView mBookmarkFavicon;
         public final View mSeparator;
+        private final ImageView mFavoriteButton;
 
         public BookmarksViewHolder(View view) {
             super(view);
             mBookmarkName = (TextView) view.findViewById(R.id.tv_bookmark_item_name);
-            mBookmarkFavicon = (ImageView) view.findViewById(R.id.tv_bookmark_item_favicon);
+            mBookmarkFavicon = (ImageView) view.findViewById(R.id.iv_bookmark_item_favicon);
+            mFavoriteButton = (ImageView) view.findViewById(R.id.iv_bookmark_item_favorite);
             mSeparator = view.findViewById(R.id.bookmark_item_separator);
-            view.setOnClickListener(this);
-            view.setOnLongClickListener(this);
-        }
 
-        @Override
-        public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            Bookmark bookmark = getItem(adapterPosition);
-            if (mClickHandler != null) mClickHandler.onClick(bookmark);
-        }
+            // register listeners
+            mFavoriteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    Bookmark bookmark = getItem(adapterPosition);
+                    if (mClickHandler != null) mClickHandler.onFavoriteClick(bookmark);
+                }
+            });
 
-        @Override
-        public boolean onLongClick(View view) {
-            int adapterPosition = getAdapterPosition();
-            Bookmark bookmark = getItem(adapterPosition);
-            if (mClickHandler != null) mClickHandler.onLongClick(bookmark);
-            return true;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    Bookmark bookmark = getItem(adapterPosition);
+                    if (mClickHandler != null) mClickHandler.onBookmarkClick(bookmark);
+                }
+            });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    Bookmark bookmark = getItem(adapterPosition);
+                    if (mClickHandler != null) mClickHandler.onLongBookmarkClick(bookmark);
+                    return true;
+                }
+            });
         }
     }
 }

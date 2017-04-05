@@ -34,6 +34,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.github.nfdz.savedio.data.RealmUtils;
 import io.github.nfdz.savedio.model.Bookmark;
 import io.github.nfdz.savedio.model.BookmarkList;
 import io.github.nfdz.savedio.utils.TasksUtils;
@@ -257,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements
      * @param bookmark
      */
     @Override
-    public void onClick(Bookmark bookmark) {
+    public void onBookmarkClick(Bookmark bookmark) {
         String url = bookmark.getUrl();
         Intent openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         final Intent searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);
@@ -290,10 +291,27 @@ public class MainActivity extends AppCompatActivity implements
      * @param bookmark
      */
     @Override
-    public void onLongClick(Bookmark bookmark) {
+    public void onLongBookmarkClick(Bookmark bookmark) {
         Intent editBookmarkIntent = new Intent(this, EditBookmarkActivity.class);
         editBookmarkIntent.putExtra(EditBookmarkActivity.BOOKMARK_ID_KEY, bookmark.getId());
         startActivity(editBookmarkIntent);
+    }
+
+    @Override
+    public void onFavoriteClick(Bookmark bookmark) {
+        // toggle favorite flag
+        boolean isFavorite = !bookmark.isFavorite();
+        RealmUtils.setFavorite(mRealm, bookmark.getId(), isFavorite, new Callback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                // TODO refresh layout (this affects sort)
+            }
+
+            @Override
+            public void onError(String msg, Throwable th) {
+                Log.e(TAG, msg, th);
+            }
+        });
     }
 
     /**

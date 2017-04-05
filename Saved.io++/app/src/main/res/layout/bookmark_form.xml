@@ -124,6 +124,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="16dp" />
 
+    <!-- TODO change button to text view (because in old devices it looks bad) -->
     <Button
         android:id="@+id/button_bookmark_form_list"
         android:layout_width="0dp"

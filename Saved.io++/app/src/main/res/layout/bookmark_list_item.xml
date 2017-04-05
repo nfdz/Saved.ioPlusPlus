@@ -19,10 +19,17 @@
         android:background="@drawable/touch_selector">
 
         <ImageView
-            android:id="@+id/tv_bookmark_item_favicon"
+            android:id="@+id/iv_bookmark_item_favorite"
+            android:layout_width="@dimen/favorite_size"
+            android:layout_height="@dimen/favorite_size"
+            android:layout_margin="@dimen/favorite_margin"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/iv_bookmark_item_favicon"
             android:layout_width="@dimen/favicon_size"
             android:layout_height="@dimen/favicon_size"
-            android:padding="@dimen/favicon_padding"
+            android:layout_margin="@dimen/favicon_margin"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
@@ -37,6 +44,7 @@
             android:textColor="@color/black"
             android:textSize="17sp"
             tools:text="Bookmark Name" />
+
 
     </LinearLayout>
 
