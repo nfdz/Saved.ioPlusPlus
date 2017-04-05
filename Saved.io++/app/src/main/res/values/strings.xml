@@ -1,8 +1,36 @@
 <resources>
+
     <string name="app_name">Saved.io++</string>
 
     <string name="main_nav_drawer_open">Open bookmark lists menu</string>
     <string name="main_nav_drawer_close">Close bookmark lists menu</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Sort settings -->
+    <string name="pref_sort_label">Sort by</string>
+    <string name="pref_sort_key" translatable="false">sort</string>
+
+    <string name="pref_sort_date_label">Date</string>
+    <string name="pref_sort_date_key" translatable="false">sort-date</string>
+    <string name="pref_sort_name_label">Name</string>
+    <string name="pref_sort_name_key" translatable="false">sort-name</string>
+
+    <string-array name="pref_sort_values_key">
+        <item>@string/pref_sort_date_key</item>
+        <item>@string/pref_sort_name_key</item>
+    </string-array>
+
+    <string-array name="pref_sort_values_label">
+        <item>@string/pref_sort_date_label</item>
+        <item>@string/pref_sort_name_label</item>
+    </string-array>
+
+    <!-- User API key settings -->
+    <string name="pref_api_label">User API key</string>
+    <string name="pref_api_key" translatable="false">user-api-key</string>
+    <string name="pref_api_default"></string>
+
 </resources>
