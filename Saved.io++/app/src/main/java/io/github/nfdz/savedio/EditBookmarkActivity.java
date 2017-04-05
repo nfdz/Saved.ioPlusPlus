@@ -109,7 +109,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
      * it is done.
      */
     private void retrieveAvailableLists() {
-        RealmUtils.retrieveListNames(mRealm, new Callback<List<String>>() {
+        RealmUtils.retrieveListNames(mRealm, new Callbacks.OperationCallback<List<String>>() {
             @Override
             public void onSuccess(List<String> result) {
                 mAvailableLists.addAll(result);
@@ -184,12 +184,12 @@ public class EditBookmarkActivity extends AppCompatActivity {
         } else {
             TasksUtils.deleteBookmark(mRealm,
                     mBookmarkId,
-                    new Callback<Bookmark>() {
+                    new Callbacks.OperationCallback<Bookmark>() {
                         @Override
                         public void onSuccess(Bookmark removed) {
                             TasksUtils.createBookmark(mRealm,
                                     editedBookmark,
-                                    new Callback<Void>() {
+                                    new Callbacks.OperationCallback<Void>() {
                                         @Override
                                         public void onSuccess(Void v) {
                                             finish();

@@ -5,6 +5,7 @@ package io.github.nfdz.savedio;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -31,15 +33,20 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.prefs.PreferenceChangeEvent;
+import java.util.prefs.PreferenceChangeListener;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.github.nfdz.savedio.data.PreferencesUtils;
 import io.github.nfdz.savedio.data.RealmUtils;
 import io.github.nfdz.savedio.model.Bookmark;
+import io.github.nfdz.savedio.model.BookmarkDateComparator;
 import io.github.nfdz.savedio.model.BookmarkList;
+import io.github.nfdz.savedio.model.BookmarkTitleComparator;
 import io.github.nfdz.savedio.utils.TasksUtils;
 import io.github.nfdz.savedio.utils.ToolbarUtils;
-import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -50,7 +57,8 @@ import io.realm.RealmResults;
 public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener,
         BookmarksAdapter.BookmarkOnClickHandler,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = MainActivity.class.getName();
 
@@ -98,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, orientation, reverseLayout);
         mBookmarksView.setLayoutManager(layoutManager);
         mBookmarksView.setHasFixedSize(true);
-        mBookmarksAdapter = new BookmarksAdapter(this, null, this);
+        mBookmarksAdapter = new BookmarksAdapter(this, this);
         mBookmarksView.setAdapter(mBookmarksAdapter);
 
         TouchHelperCallback touchHelperCallback = new TouchHelperCallback();
@@ -107,10 +115,6 @@ public class MainActivity extends AppCompatActivity implements
 
         mListsAdaper = new ListsAdapter(this, null);
         mNavigationListView.setAdapter(mListsAdaper);
-
-        updateLists();
-        updateListLayout();
-        updateBookmarks();
     }
 
     private void updateLists() {
@@ -137,6 +141,22 @@ public class MainActivity extends AppCompatActivity implements
         mToggleNav.syncState();
         mNavigationListView.setOnItemClickListener(this);
         mSwipeRefresh.setOnRefreshListener(this);
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
+
+        PreferencesUtils.retrievePreferredSort(this, new Callbacks.FinishCallback<String>() {
+            @Override
+            public void onFinish(String sort) {
+                if (MainActivity.this.getString(R.string.pref_sort_date_key).equals(sort)) {
+                    mBookmarksAdapter.setComparator(new BookmarkDateComparator());
+                } else {
+                    mBookmarksAdapter.setComparator(new BookmarkTitleComparator());
+                }
+                updateLists();
+                updateListLayout();
+                updateBookmarks();
+            }
+        });
     }
 
     @Override
@@ -145,6 +165,8 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerLayout.removeDrawerListener(mToggleNav);
         mNavigationListView.setOnItemClickListener(null);
         mSwipeRefresh.setOnRefreshListener(null);
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -231,8 +253,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private void updateBookmarks() {
         showNothing();
-        OrderedRealmCollection<Bookmark> bookmarks = getBookmarks();
-        mBookmarksAdapter.updateData(bookmarks);
+        RealmResults<Bookmark> bookmarks = getBookmarks();
+        mBookmarksAdapter.swapData(bookmarks);
         if (bookmarks != null) {
             showBookmarks();
         } else {
@@ -240,15 +262,17 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private OrderedRealmCollection<Bookmark> getBookmarks() {
-        OrderedRealmCollection<Bookmark> result;
+    private RealmResults<Bookmark> getBookmarks() {
+        RealmResults<Bookmark> result;
         if (TextUtils.isEmpty(mSelectedList)) {
             result = mRealm.where(Bookmark.class).findAll();
         } else {
             result = mRealm.where(BookmarkList.class)
                     .equalTo(BookmarkList.FIELD_LIST_NAME, mSelectedList)
                     .findFirst()
-                    .getBookmarks();
+                    .getBookmarks()
+                    .where()
+                    .findAll();
         }
         return result;
     }
@@ -301,12 +325,11 @@ public class MainActivity extends AppCompatActivity implements
     public void onFavoriteClick(Bookmark bookmark) {
         // toggle favorite flag
         boolean isFavorite = !bookmark.isFavorite();
-        RealmUtils.setFavorite(mRealm, bookmark.getId(), isFavorite, new Callback<Void>() {
+        RealmUtils.setFavorite(mRealm, bookmark.getId(), isFavorite, new Callbacks.OperationCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
-                // TODO refresh layout (this affects sort)
+                // nothing to do
             }
-
             @Override
             public void onError(String msg, Throwable th) {
                 Log.e(TAG, msg, th);
@@ -322,6 +345,22 @@ public class MainActivity extends AppCompatActivity implements
         // TODO sync data from internet
         mSwipeRefresh.setRefreshing(false);
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_sort_key))) {
+            PreferencesUtils.retrievePreferredSort(this, new Callbacks.FinishCallback<String>() {
+                @Override
+                public void onFinish(String sort) {
+                    if (getString(R.string.pref_sort_date_key).equals(sort)) {
+                        mBookmarksAdapter.setComparator(new BookmarkDateComparator());
+                    } else {
+                        mBookmarksAdapter.setComparator(new BookmarkTitleComparator());
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -352,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements
     private void deleteBookmark(final String bookmarkId) {
         TasksUtils.deleteBookmark(mRealm,
                 bookmarkId,
-                new Callback<Bookmark>() {
+                new Callbacks.OperationCallback<Bookmark>() {
                     @Override
                     public void onSuccess(final Bookmark removedBookmark) {
                         // if bookmark was removed, ensure that selected list is not empty
@@ -391,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements
     private void insertBookmark(final Bookmark bookmark) {
         TasksUtils.createBookmark(mRealm,
                 bookmark,
-                new Callback<Void>() {
+                new Callbacks.OperationCallback<Void>() {
                     @Override
                     public void onSuccess(Void v) {
                         // nothing

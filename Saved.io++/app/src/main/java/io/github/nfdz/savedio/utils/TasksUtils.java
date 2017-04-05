@@ -6,7 +6,7 @@ package io.github.nfdz.savedio.utils;
 
 import java.util.Random;
 
-import io.github.nfdz.savedio.Callback;
+import io.github.nfdz.savedio.Callbacks;
 import io.github.nfdz.savedio.data.RealmUtils;
 import io.github.nfdz.savedio.model.Bookmark;
 import io.realm.Realm;
@@ -28,10 +28,10 @@ public class TasksUtils {
      */
     public static void createBookmark(final Realm realm,
                                       final Bookmark bookmark,
-                                      final Callback<Void> callback) {
+                                      final Callbacks.OperationCallback<Void> callback) {
         // TODO create bookmark in server
         bookmark.setId("" + new Random().nextInt(Integer.MAX_VALUE));
-        bookmark.setDate("AAAA:BB:SS ASD AS 0");
+        bookmark.setDate("" + System.currentTimeMillis());
 
         // store it in persistence
         RealmUtils.addBookmark(realm, bookmark, callback);
@@ -44,7 +44,8 @@ public class TasksUtils {
      * @param bookmarkId ID of the bookmark that will be removed.
      * @param callback to be notified.
      */
-    public static void deleteBookmark(Realm realm, String bookmarkId, Callback<Bookmark> callback) {
+    public static void deleteBookmark(Realm realm, String bookmarkId,
+                                      Callbacks.OperationCallback<Bookmark> callback) {
         // TODO remove bookmark in server
 
         RealmUtils.removeBookmark(realm, bookmarkId, callback);

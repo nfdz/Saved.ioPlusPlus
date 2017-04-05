@@ -17,6 +17,7 @@
     <string name="pref_sort_date_key" translatable="false">sort-date</string>
     <string name="pref_sort_name_label">Name</string>
     <string name="pref_sort_name_key" translatable="false">sort-name</string>
+    <string name="pref_sort_default" translatable="false">@string/pref_sort_date_key</string>
 
     <string-array name="pref_sort_values_key">
         <item>@string/pref_sort_date_key</item>
@@ -31,6 +32,6 @@
     <!-- User API key settings -->
     <string name="pref_api_label">User API key</string>
     <string name="pref_api_key" translatable="false">user-api-key</string>
-    <string name="pref_api_default"></string>
+    <string name="pref_api_default" translatable="false"></string>
 
 </resources>

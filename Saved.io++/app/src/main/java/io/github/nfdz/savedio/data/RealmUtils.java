@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.github.nfdz.savedio.Callback;
+import io.github.nfdz.savedio.Callbacks;
 import io.github.nfdz.savedio.model.Bookmark;
 import io.github.nfdz.savedio.model.BookmarkList;
 import io.realm.Realm;
@@ -31,7 +31,7 @@ public class RealmUtils {
      */
     public static RealmAsyncTask addBookmark(final Realm realm,
                                              final Bookmark bookmark,
-                                             final Callback<Void> callback) {
+                                             final Callbacks.OperationCallback<Void> callback) {
         return realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -78,7 +78,7 @@ public class RealmUtils {
      */
     public static RealmAsyncTask removeBookmark(Realm realm,
                                                 final String bookmarkId,
-                                                final Callback<Bookmark> callback) {
+                                                final Callbacks.OperationCallback<Bookmark> callback) {
         final AtomicReference<Bookmark> removedBookmark = new AtomicReference<>(null);
         return realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -118,7 +118,7 @@ public class RealmUtils {
      * @return realm async task.
      */
     public static RealmAsyncTask retrieveListNames(Realm realm,
-                                                   final Callback<List<String>> callback) {
+                                                   final Callbacks.OperationCallback<List<String>> callback) {
         final List<String> lists = new ArrayList<>();
         return realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -144,7 +144,7 @@ public class RealmUtils {
     public static RealmAsyncTask setFavorite(Realm realm,
                                              final String bookmarkId,
                                              final boolean isFavorite,
-                                             final Callback<Void> callback) {
+                                             final Callbacks.OperationCallback<Void> callback) {
         return realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

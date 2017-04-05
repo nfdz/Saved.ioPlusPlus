@@ -100,7 +100,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
     }
 
     private void retrieveAvailableLists(final String initialSelection) {
-        RealmUtils.retrieveListNames(mRealm, new Callback<List<String>>() {
+        RealmUtils.retrieveListNames(mRealm, new Callbacks.OperationCallback<List<String>>() {
             @Override
             public void onSuccess(List<String> result) {
                 mAvailableLists.addAll(result);
@@ -150,7 +150,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
         } else {
             TasksUtils.createBookmark(mRealm,
                     bookmark,
-                    new Callback<Void>() {
+                    new Callbacks.OperationCallback<Void>() {
                         @Override
                         public void onSuccess(Void v) {
                             finish();

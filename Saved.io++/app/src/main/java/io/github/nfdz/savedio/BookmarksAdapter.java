@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,18 +19,28 @@ import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import io.github.nfdz.savedio.model.Bookmark;
-import io.realm.OrderedRealmCollection;
-import io.realm.RealmRecyclerViewAdapter;
+import io.github.nfdz.savedio.model.BookmarkTitleComparator;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 /**
  * This class is a realm recycler view adapter and manage the creation and binding of bookmark UI items.
  */
-public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, BookmarksAdapter.BookmarksViewHolder> {
+public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.BookmarksViewHolder> {
 
     private final Context mContext;
     private final BookmarkOnClickHandler mClickHandler;
+    private final DataChangesListener mChangesListener;
+    private final List<Bookmark> mSortedData;
+
+    private RealmResults<Bookmark> mData;
+    private Comparator<Bookmark> mComparator;
 
     /**
      * The interface to be implemented to receive on click events.
@@ -45,15 +54,34 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
     /**
      * Constructor.
      * @param context
-     * @param bookmarks
      * @param clickHandler
      */
     public BookmarksAdapter(@NonNull Context context,
-                            @Nullable OrderedRealmCollection<Bookmark> bookmarks,
                             @Nullable BookmarkOnClickHandler clickHandler) {
-        super(context, bookmarks, true);
         mContext = context;
         mClickHandler = clickHandler;
+        mSortedData = new ArrayList<>();
+        mChangesListener = new DataChangesListener();
+    }
+
+    public void swapData(RealmResults<Bookmark> data) {
+        if (mData != null) mData.removeChangeListener(mChangesListener);
+        mSortedData.clear();
+        mData = data;
+        if (mData != null) {
+            mData.addChangeListener(mChangesListener);
+            mSortedData.addAll(mData);
+            // TODO: perform this in a background thread
+            if (mComparator != null) Collections.sort(mSortedData, mComparator);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setComparator(Comparator<Bookmark> comparator) {
+        // TODO: perform this in a background thread
+        mComparator = comparator;
+        if (mComparator != null) Collections.sort(mSortedData, mComparator);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -67,7 +95,7 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
 
     @Override
     public void onBindViewHolder(BookmarksViewHolder holder, int position) {
-        Bookmark bookmark = getItem(position);
+        Bookmark bookmark = mSortedData.get(position);
         holder.mBookmarkName.setText(bookmark.getTitle());
         Drawable favoriteDrawable = bookmark.isFavorite() ?
                 ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_on)
@@ -89,6 +117,11 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
         holder.itemView.setTag(bookmark.getId());
     }
 
+    @Override
+    public int getItemCount() {
+        return mSortedData.size();
+    }
+
     /**
      * Tries to infer the favicon path with given URL.
      * @param rawUrl path.
@@ -104,6 +137,16 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
             // swallow
         }
         return faviconPath;
+    }
+
+    private class DataChangesListener implements RealmChangeListener<RealmResults<Bookmark>> {
+        @Override
+        public void onChange(RealmResults<Bookmark> element) {
+            mSortedData.clear();
+            mSortedData.addAll(element);
+            if (mComparator != null) Collections.sort(mSortedData, mComparator);
+            notifyDataSetChanged();
+        }
     }
 
     /**
@@ -128,7 +171,7 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
                 @Override
                 public void onClick(View v) {
                     int adapterPosition = getAdapterPosition();
-                    Bookmark bookmark = getItem(adapterPosition);
+                    Bookmark bookmark = mSortedData.get(adapterPosition);
                     if (mClickHandler != null) mClickHandler.onFavoriteClick(bookmark);
                 }
             });
@@ -137,7 +180,7 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
                 @Override
                 public void onClick(View v) {
                     int adapterPosition = getAdapterPosition();
-                    Bookmark bookmark = getItem(adapterPosition);
+                    Bookmark bookmark = mSortedData.get(adapterPosition);
                     if (mClickHandler != null) mClickHandler.onBookmarkClick(bookmark);
                 }
             });
@@ -146,7 +189,7 @@ public class BookmarksAdapter extends RealmRecyclerViewAdapter<Bookmark, Bookmar
                 @Override
                 public boolean onLongClick(View v) {
                     int adapterPosition = getAdapterPosition();
-                    Bookmark bookmark = getItem(adapterPosition);
+                    Bookmark bookmark = mSortedData.get(adapterPosition);
                     if (mClickHandler != null) mClickHandler.onLongBookmarkClick(bookmark);
                     return true;
                 }
