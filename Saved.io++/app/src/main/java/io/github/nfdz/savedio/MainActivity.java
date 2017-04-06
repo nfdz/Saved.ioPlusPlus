@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.toolbar_logo) ImageView mLogo;
-    @BindView(R.id.tv_main_error_message) TextView mErrorMessage;
     @BindView(R.id.swipe_refresh_main) SwipeRefreshLayout mSwipeRefresh;
     @BindView(R.id.layout_main_content) LinearLayout mContent;
     @BindView(R.id.layout_main_content_info) LinearLayout mContentInfo;
@@ -217,17 +216,10 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showBookmarks() {
         mContent.setVisibility(View.VISIBLE);
-        mErrorMessage.setVisibility(View.INVISIBLE);
-    }
-
-    private void showError() {
-        mContent.setVisibility(View.INVISIBLE);
-        mErrorMessage.setVisibility(View.VISIBLE);
     }
 
     private void showNothing() {
         mContent.setVisibility(View.INVISIBLE);
-        mErrorMessage.setVisibility(View.INVISIBLE);
     }
 
     @OnClick(R.id.fab_add_bookmark)
@@ -284,11 +276,7 @@ public class MainActivity extends AppCompatActivity implements
         showNothing();
         RealmResults<Bookmark> bookmarks = getBookmarks();
         mBookmarksAdapter.swapData(bookmarks);
-        if (bookmarks != null) {
-            showBookmarks();
-        } else {
-            showError();
-        }
+        showBookmarks();
     }
 
     private RealmResults<Bookmark> getBookmarks() {
@@ -300,12 +288,16 @@ public class MainActivity extends AppCompatActivity implements
                         .findAll();
                 break;
             case LIST_CONTENT:
-                result = mRealm.where(BookmarkList.class)
+                BookmarkList list = mRealm.where(BookmarkList.class)
                         .equalTo(BookmarkList.FIELD_LIST_NAME, mSelectedList)
-                        .findFirst()
-                        .getBookmarks()
-                        .where()
-                        .findAll();
+                        .findFirst();
+                if (list != null) {
+                    result = list.getBookmarks()
+                            .where()
+                            .findAll();
+                } else {
+                    result = null;
+                }
                 break;
             default:
                 result = mRealm.where(Bookmark.class).findAll();

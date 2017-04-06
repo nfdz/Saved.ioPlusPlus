@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
     @BindView(R.id.et_bookmark_form_url) EditText mBookmarkUrl;
     @BindView(R.id.et_bookmark_form_notes) EditText mBookmarkNotes;
     @BindView(R.id.pb_new_bookmark_loading) ProgressBar mSaveLoading;
-    @BindView(R.id.button_bookmark_form_list) Button mBookmarkList;
+    @BindView(R.id.tv_bookmark_form_list) TextView mBookmarkList;
     @BindView(R.id.layout_new_bookmark_content) View mContent;
     @BindView(R.id.button_bookmark_form_action) Button mSaveButton;
 
@@ -123,7 +124,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
         BookmarkFormUtils.onAddListClick(this, mAvailableLists, mBookmarkList);
     }
 
-    @OnClick(R.id.button_bookmark_form_list)
+    @OnClick(R.id.tv_bookmark_form_list)
     public void onChangeSelectedListClick() {
         BookmarkFormUtils.onChangeSelectedListClick(this, mAvailableLists, mBookmarkList);
     }

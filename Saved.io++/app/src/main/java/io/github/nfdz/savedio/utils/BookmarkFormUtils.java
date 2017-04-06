@@ -12,8 +12,8 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +32,7 @@ public class BookmarkFormUtils {
      */
     public static void onChangeSelectedListClick(Context context,
                                                  List<String> availableLists,
-                                                 final Button bookmarkList) {
+                                                 final TextView bookmarkList) {
         // find position of selected
         final String[] options = availableLists.toArray(new String[availableLists.size()]);
         String selectedList = bookmarkList.getText().toString();
@@ -70,7 +70,7 @@ public class BookmarkFormUtils {
      */
     public static void onAddListClick(final Context context,
                                       final List<String> availableLists,
-                                      final Button bookmarkList) {
+                                      final TextView bookmarkList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Add a new list");
         final EditText input = new EditText(context);
