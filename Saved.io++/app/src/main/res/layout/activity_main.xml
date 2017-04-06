@@ -35,7 +35,7 @@
                 android:padding="14dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="All" />
+                android:text="@string/main_menu_all" />
 
             <View
                 android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                 android:padding="14dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="Favorites" />
+                android:text="@string/main_menu_favorites" />
 
             <View
                 android:layout_width="match_parent"

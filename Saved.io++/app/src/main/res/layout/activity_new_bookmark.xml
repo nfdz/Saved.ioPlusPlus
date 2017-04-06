@@ -9,8 +9,8 @@
 
     <ProgressBar
         android:id="@+id/pb_new_bookmark_loading"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/loading_size"
+        android:layout_height="@dimen/loading_size"
         android:layout_gravity="center"
         android:visibility="invisible"/>
 

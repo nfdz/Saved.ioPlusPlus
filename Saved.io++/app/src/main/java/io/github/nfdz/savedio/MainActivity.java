@@ -34,9 +34,6 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.prefs.PreferenceChangeEvent;
-import java.util.prefs.PreferenceChangeListener;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -160,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements
         PreferencesUtils.retrievePreferredSort(this, new Callbacks.FinishCallback<String>() {
             @Override
             public void onFinish(String sort) {
-                if (MainActivity.this.getString(R.string.pref_sort_date_key).equals(sort)) {
+                if (getString(R.string.pref_sort_date_key).equals(sort)) {
                     mBookmarksAdapter.setComparator(new BookmarkDateComparator());
                 } else {
                     mBookmarksAdapter.setComparator(new BookmarkTitleComparator());
@@ -209,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements
                 mContentInfo.setVisibility(View.VISIBLE);
                 break;
             case FAVORITE_CONTENT:
-                mContentName.setText("Favorites");
+                mContentName.setText(getString(R.string.main_content_favorites));
                 mContentSwitch.setVisibility(View.GONE);
                 mContentInfo.setVisibility(View.VISIBLE);
                 break;
@@ -448,9 +445,9 @@ public class MainActivity extends AppCompatActivity implements
                                 }
                             }
                             Snackbar.make(mContent,
-                                    "Bookmark deleted successfully",
+                                    getString(R.string.main_bookmark_deleted),
                                     Snackbar.LENGTH_LONG)
-                                    .setAction("Undo", new View.OnClickListener() {
+                                    .setAction(getString(R.string.main_bookmark_deleted_undo), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             insertBookmark(removedBookmark);

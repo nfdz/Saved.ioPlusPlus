@@ -1,9 +1,16 @@
 <resources>
     <dimen name="activity_horizontal_padding">16dp</dimen>
     <dimen name="activity_vertical_padding">16dp</dimen>
+
     <dimen name="fab_add_margin">16dp</dimen>
+
     <dimen name="favicon_size">15dp</dimen>
     <dimen name="favicon_margin">5dp</dimen>
+
     <dimen name="favorite_size">30dp</dimen>
     <dimen name="favorite_margin">5dp</dimen>
+
+    <dimen name="loading_size">50dp</dimen>
+
+    <dimen name="app_bar_logo_height">26dp</dimen>
 </resources>
