@@ -31,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.prefs.PreferenceChangeEvent;
@@ -61,24 +62,32 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = MainActivity.class.getName();
+    private static final int ALL_CONTENT = 0;
+    private static final int FAVORITE_CONTENT = 1;
+    private static final int LIST_CONTENT = 2;
+    private static final String NO_LIST = "";
 
     /** Key of the selected list in saved instance state */
     private static final String LIST_KEY = "selected-list";
+
+    private static final String CONTENT_KEY = "selected-content";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.toolbar_logo) ImageView mLogo;
     @BindView(R.id.tv_main_error_message) TextView mErrorMessage;
     @BindView(R.id.swipe_refresh_main) SwipeRefreshLayout mSwipeRefresh;
     @BindView(R.id.layout_main_content) LinearLayout mContent;
-    @BindView(R.id.layout_main_list_info) LinearLayout mListInfo;
-    @BindView(R.id.tv_main_list_name) TextView mListName;
+    @BindView(R.id.layout_main_content_info) LinearLayout mContentInfo;
+    @BindView(R.id.tv_main_content_name) TextView mContentName;
     @BindView(R.id.rv_bookmarks) RecyclerView mBookmarksView;
     @BindView(R.id.drawer_layout_main) DrawerLayout mDrawerLayout;
     @BindView(R.id.nv_main_menu_list) ListView mNavigationListView;
+    @BindView(R.id.switch_main_content) Switch mContentSwitch;
 
     private ActionBarDrawerToggle mToggleNav;
     private BookmarksAdapter mBookmarksAdapter;
-    private String mSelectedList = "";
+    private int mSelectedContent;
+    private String mSelectedList;
     private ListsAdapter mListsAdaper;
     private Realm mRealm;
 
@@ -93,7 +102,10 @@ public class MainActivity extends AppCompatActivity implements
         Realm.init(this);
 
         mRealm = Realm.getDefaultInstance();
-        if (savedInstanceState != null) mSelectedList = savedInstanceState.getString(LIST_KEY);
+        if (savedInstanceState != null) {
+            mSelectedContent = savedInstanceState.getInt(CONTENT_KEY, ALL_CONTENT);
+            mSelectedList = savedInstanceState.getString(LIST_KEY, NO_LIST);
+        }
 
         mToggleNav = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
@@ -125,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt(CONTENT_KEY, mSelectedContent);
         outState.putString(LIST_KEY, mSelectedList);
     }
 
@@ -189,11 +202,19 @@ public class MainActivity extends AppCompatActivity implements
      * selected list (that could be null or empty).
      */
     private void updateListLayout() {
-        if (TextUtils.isEmpty(mSelectedList)) {
-            mListInfo.setVisibility(View.GONE);
-        } else {
-            mListName.setText(mSelectedList);
-            mListInfo.setVisibility(View.VISIBLE);
+        switch (mSelectedContent) {
+            case LIST_CONTENT:
+                mContentName.setText(mSelectedList);
+                mContentSwitch.setVisibility(View.VISIBLE);
+                mContentInfo.setVisibility(View.VISIBLE);
+                break;
+            case FAVORITE_CONTENT:
+                mContentName.setText("Favorites");
+                mContentSwitch.setVisibility(View.GONE);
+                mContentInfo.setVisibility(View.VISIBLE);
+                break;
+            default:
+                mContentInfo.setVisibility(View.GONE);
         }
     }
 
@@ -234,7 +255,17 @@ public class MainActivity extends AppCompatActivity implements
 
     @OnClick(R.id.nv_main_menu_all)
     public void onAllListClick() {
-        mSelectedList = "";
+        mSelectedList = NO_LIST;
+        mSelectedContent = ALL_CONTENT;
+        updateListLayout();
+        updateBookmarks();
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    @OnClick(R.id.nv_main_menu_favorites)
+    public void onFavoriteListClick() {
+        mSelectedList = NO_LIST;
+        mSelectedContent = FAVORITE_CONTENT;
         updateListLayout();
         updateBookmarks();
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -245,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        mSelectedContent = LIST_CONTENT;
         mSelectedList = mListsAdaper.getItem(position).getListName();
         updateListLayout();
         updateBookmarks();
@@ -264,15 +296,22 @@ public class MainActivity extends AppCompatActivity implements
 
     private RealmResults<Bookmark> getBookmarks() {
         RealmResults<Bookmark> result;
-        if (TextUtils.isEmpty(mSelectedList)) {
-            result = mRealm.where(Bookmark.class).findAll();
-        } else {
-            result = mRealm.where(BookmarkList.class)
-                    .equalTo(BookmarkList.FIELD_LIST_NAME, mSelectedList)
-                    .findFirst()
-                    .getBookmarks()
-                    .where()
-                    .findAll();
+        switch (mSelectedContent) {
+            case FAVORITE_CONTENT:
+                result = mRealm.where(Bookmark.class)
+                        .equalTo(Bookmark.FIELD_FAVORITE, true)
+                        .findAll();
+                break;
+            case LIST_CONTENT:
+                result = mRealm.where(BookmarkList.class)
+                        .equalTo(BookmarkList.FIELD_LIST_NAME, mSelectedList)
+                        .findFirst()
+                        .getBookmarks()
+                        .where()
+                        .findAll();
+                break;
+            default:
+                result = mRealm.where(Bookmark.class).findAll();
         }
         return result;
     }
@@ -396,12 +435,14 @@ public class MainActivity extends AppCompatActivity implements
                     public void onSuccess(final Bookmark removedBookmark) {
                         // if bookmark was removed, ensure that selected list is not empty
                         if (removedBookmark != null) {
-                            if (!TextUtils.isEmpty(mSelectedList)) {
+                            if (mSelectedContent == LIST_CONTENT &&
+                                    !TextUtils.isEmpty(mSelectedList)) {
                                 BookmarkList list = mRealm.where(BookmarkList.class)
                                         .equalTo(BookmarkList.FIELD_LIST_NAME, mSelectedList)
                                         .findFirst();
                                 if (list == null) {
-                                    mSelectedList = "";
+                                    mSelectedContent = ALL_CONTENT;
+                                    mSelectedList = NO_LIST;
                                     updateListLayout();
                                     updateBookmarks();
                                 }

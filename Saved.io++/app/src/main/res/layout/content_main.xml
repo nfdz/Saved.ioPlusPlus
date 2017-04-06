@@ -35,18 +35,17 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/layout_main_list_info"
+                android:id="@+id/layout_main_content_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/activity_horizontal_padding"
                 android:paddingRight="@dimen/activity_horizontal_padding"
-                android:paddingTop="@dimen/activity_vertical_padding"
                 android:background="@color/colorPrimaryDark"
                 android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/tv_main_list_name"
+                    android:id="@+id/tv_main_content_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="List name"
@@ -54,9 +53,10 @@
                     android:textStyle="bold"
                     android:layout_gravity="center"
                     android:textColor="@color/white"
-                    android:layout_margin="4dp" />
+                    android:layout_margin="12dp" />
 
                 <Switch
+                    android:id="@+id/switch_main_content"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="center"

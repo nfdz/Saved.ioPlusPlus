@@ -42,6 +42,23 @@
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryLight"/>
 
+            <TextView
+                android:id="@+id/nv_main_menu_favorites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:background="@drawable/touch_selector"
+                android:padding="14dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="Favorites" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryLight"/>
+
             <ListView
                 android:id="@+id/nv_main_menu_list"
                 android:background="@color/white"
