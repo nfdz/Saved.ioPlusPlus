@@ -34,6 +34,8 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements
     /** Key of the selected list in saved instance state */
     private static final String LIST_KEY = "selected-list";
 
+    /** Key of the selected content in saved instance state */
     private static final String CONTENT_KEY = "selected-content";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
@@ -146,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        // add listeners
         mDrawerLayout.addDrawerListener(mToggleNav);
         mToggleNav.syncState();
         mNavigationListView.setOnItemClickListener(this);
@@ -153,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this);
 
+        // update adapter comparator with preferences
         PreferencesUtils.retrievePreferredSort(this, new Callbacks.FinishCallback<String>() {
             @Override
             public void onFinish(String sort) {
@@ -162,8 +167,16 @@ public class MainActivity extends AppCompatActivity implements
                     mBookmarksAdapter.setComparator(new BookmarkTitleComparator());
                 }
                 updateLists();
-                updateListLayout();
-                updateBookmarks();
+                updateInfoLayout();
+                List<Bookmark> bookmarks = updateBookmarks();
+                // ensure that there are some bookmarks if a list selected
+                if (mSelectedContent == LIST_CONTENT &&
+                        (bookmarks == null || bookmarks.size() == 0)) {
+                    mSelectedList = NO_LIST;
+                    mSelectedContent = ALL_CONTENT;
+                    updateInfoLayout();
+                    updateBookmarks();
+                }
             }
         });
     }
@@ -194,10 +207,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * This methods hides or shows the list info layout section depending on the value of
-     * selected list (that could be null or empty).
+     * This methods hides or shows the info layout section depending on the value of
+     * selected content.
      */
-    private void updateListLayout() {
+    private void updateInfoLayout() {
         switch (mSelectedContent) {
             case LIST_CONTENT:
                 mContentName.setText(mSelectedList);
@@ -246,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onAllListClick() {
         mSelectedList = NO_LIST;
         mSelectedContent = ALL_CONTENT;
-        updateListLayout();
+        updateInfoLayout();
         updateBookmarks();
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }
@@ -255,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onFavoriteListClick() {
         mSelectedList = NO_LIST;
         mSelectedContent = FAVORITE_CONTENT;
-        updateListLayout();
+        updateInfoLayout();
         updateBookmarks();
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }
@@ -267,18 +280,27 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         mSelectedContent = LIST_CONTENT;
         mSelectedList = mListsAdaper.getItem(position).getListName();
-        updateListLayout();
+        updateInfoLayout();
         updateBookmarks();
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
-    private void updateBookmarks() {
+    /**
+     * Update the content of recycler view performing a new query in realm.
+     * @return the new data used by adapter, it could be null.
+     */
+    private RealmResults<Bookmark> updateBookmarks() {
         showNothing();
         RealmResults<Bookmark> bookmarks = getBookmarks();
         mBookmarksAdapter.swapData(bookmarks);
         showBookmarks();
+        return bookmarks;
     }
 
+    /**
+     * Perform a query in realm depending of the selected content flag.
+     * @return results of the query, it could be null.
+     */
     private RealmResults<Bookmark> getBookmarks() {
         RealmResults<Bookmark> result;
         switch (mSelectedContent) {
@@ -321,9 +343,9 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(openIntent);
         } else if (searchIntent.resolveActivity(pm) != null) {
             Snackbar.make(mContent,
-                    "Unable to open URL",
+                    getString(R.string.main_bookmark_unable_click),
                     Snackbar.LENGTH_LONG)
-                    .setAction("Search", new View.OnClickListener() {
+                    .setAction(getString(R.string.main_bookmark_unable_click_search), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             startActivity(searchIntent);
@@ -332,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements
                     .show();
         } else {
             Snackbar.make(mContent,
-                    "Unable to open URL",
+                    getString(R.string.main_bookmark_unable_click),
                     Snackbar.LENGTH_LONG)
                     .show();
         }
@@ -426,13 +448,10 @@ public class MainActivity extends AppCompatActivity implements
                         if (removedBookmark != null) {
                             if (mSelectedContent == LIST_CONTENT &&
                                     !TextUtils.isEmpty(mSelectedList)) {
-                                BookmarkList list = mRealm.where(BookmarkList.class)
-                                        .equalTo(BookmarkList.FIELD_LIST_NAME, mSelectedList)
-                                        .findFirst();
-                                if (list == null) {
+                                if (mBookmarksAdapter.getItemCount() == 0) {
                                     mSelectedContent = ALL_CONTENT;
                                     mSelectedList = NO_LIST;
-                                    updateListLayout();
+                                    updateInfoLayout();
                                     updateBookmarks();
                                 }
                             }
