@@ -37,7 +37,7 @@ import io.realm.Realm;
  */
 public class NewBookmarkActivity extends AppCompatActivity {
 
-    /** Key of the selected list in extra data intent map */
+    /** Key of the selected list in extra data intent map and in saved instance state */
     public static final String SELECTED_LIST_KEY = "selected-list";
 
     private static final String TAG = NewBookmarkActivity.class.getName();
@@ -74,13 +74,26 @@ public class NewBookmarkActivity extends AppCompatActivity {
             initialSelection = getIntent().getStringExtra(SELECTED_LIST_KEY);
         }
 
-        // TODO store in savedInstanceState the selected list and available lists
+        // extract initial selection from saved state
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_LIST_KEY)) {
+            initialSelection = savedInstanceState.getString(SELECTED_LIST_KEY);
+        }
+
         mSaveButton.setText(R.string.new_bookmark_button);
         mAvailableLists.add(NO_LIST_VALUE);
         mBookmarkList.setText(NO_LIST_VALUE);
         mUrlValidator = new BookmarkFormUtils.URLTextValidator(mSaveButton);
         mBookmarkUrl.addTextChangedListener(mUrlValidator);
         retrieveAvailableLists(initialSelection);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String selectedList = mBookmarkList.getText().toString();
+        if (!TextUtils.isEmpty(selectedList)) {
+            outState.putString(SELECTED_LIST_KEY, selectedList);
+        }
     }
 
     @Override
@@ -105,12 +118,12 @@ public class NewBookmarkActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<String> result) {
                 mAvailableLists.addAll(result);
-                Collections.sort(mAvailableLists);
                 // if there is an initial selection and it is valid, set in list field
-                if (!TextUtils.isEmpty(initialSelection) &&
-                        mAvailableLists.contains(initialSelection)) {
+                if (!TextUtils.isEmpty(initialSelection)) {
+                    if (!mAvailableLists.contains(initialSelection)) mAvailableLists.add(initialSelection);
                     mBookmarkList.setText(initialSelection);
                 }
+                Collections.sort(mAvailableLists);
             }
             @Override
             public void onError(String msg, Throwable e) {

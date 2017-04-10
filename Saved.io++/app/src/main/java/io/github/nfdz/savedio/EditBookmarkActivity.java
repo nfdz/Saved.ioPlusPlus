@@ -41,6 +41,13 @@ public class EditBookmarkActivity extends AppCompatActivity {
     /** Key of the bookmark ID in extra data intent map */
     public static final String BOOKMARK_ID_KEY = "bookmark-id";
 
+    /** Key of the selected list in saved instance state */
+    public static final String SELECTED_LIST_KEY = "selected-list";
+
+    /** Key of the selected list in saved instance state */
+    public static final String WAS_EDITED_KEY = "was-edited";
+
+
     private static final String TAG = EditBookmarkActivity.class.getName();
     private static final String NO_LIST_VALUE = "-";
 
@@ -58,6 +65,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
     private List<String> mAvailableLists = new ArrayList<>();
     private TextWatcher mUrlValidator;
     private String mBookmarkId;
+    private boolean mFilledForm = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +87,33 @@ public class EditBookmarkActivity extends AppCompatActivity {
             finish();
         }
 
-        // TODO store in savedInstanceState the selected list and available lists
+        // extract was edited flag and last selection from saved state
+        String lastSelection = null;
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_LIST_KEY)) {
+            lastSelection = savedInstanceState.getString(SELECTED_LIST_KEY);
+        }
+        boolean wasEdited = false;
+        if (savedInstanceState != null && savedInstanceState.containsKey(WAS_EDITED_KEY)) {
+            wasEdited = savedInstanceState.getBoolean(WAS_EDITED_KEY);
+        }
+
         mEditButton.setText(R.string.edit_bookmark_button);
         mAvailableLists.add(NO_LIST_VALUE);
         mUrlValidator = new BookmarkFormUtils.URLTextValidator(mEditButton);
         mBookmarkUrl.addTextChangedListener(mUrlValidator);
         showLoading();
-        retrieveAvailableLists();
+        retrieveAvailableLists(wasEdited, lastSelection);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String selectedList = mBookmarkList.getText().toString();
+        if (!TextUtils.isEmpty(selectedList)) {
+            outState.putString(SELECTED_LIST_KEY, selectedList);
+        }
+        // assume that could be edited if the form was already filled
+        outState.putBoolean(WAS_EDITED_KEY, mFilledForm);
     }
 
     @Override
@@ -109,18 +137,28 @@ public class EditBookmarkActivity extends AppCompatActivity {
      * Retrieves available list names from persistence and calls fill bookmark form method when
      * it is done.
      */
-    private void retrieveAvailableLists() {
+    private void retrieveAvailableLists(final boolean wasEdited, final String lastSelection) {
         RealmUtils.retrieveListNames(mRealm, new Callbacks.OperationCallback<List<String>>() {
             @Override
             public void onSuccess(List<String> result) {
                 mAvailableLists.addAll(result);
+                // if there is a last selection and it is valid, set in list field
+                if (!TextUtils.isEmpty(lastSelection)) {
+                    if (!mAvailableLists.contains(lastSelection)) mAvailableLists.add(lastSelection);
+                    mBookmarkList.setText(lastSelection);
+                }
                 Collections.sort(mAvailableLists);
-                fillBookmarkForm();
+                if (!wasEdited) {
+                    fillBookmarkForm();
+                } else {
+                    showContent();
+                    mFilledForm = true;
+                }
             }
             @Override
             public void onError(String msg, Throwable e) {
                 Log.e(TAG, msg, e);
-                fillBookmarkForm();
+                onSuccess(Collections.<String>emptyList());
             }
         });
     }
@@ -161,6 +199,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
             Collections.sort(mAvailableLists);
         }
         showContent();
+        mFilledForm = true;
     }
 
     @OnClick(R.id.button_bookmark_form_action)
