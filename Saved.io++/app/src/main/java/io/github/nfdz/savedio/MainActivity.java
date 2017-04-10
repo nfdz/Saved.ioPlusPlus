@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements
     /** Key of the selected content in saved instance state */
     private static final String CONTENT_KEY = "selected-content";
 
+    /** Key of the bookmark recycler view position in saved instance state */
+    private static final String LIST_POSITION_KEY = "bookmark-list-position";
+
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.toolbar_logo) ImageView mLogo;
     @BindView(R.id.swipe_refresh_main) SwipeRefreshLayout mSwipeRefresh;
@@ -89,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements
     private String mSelectedList;
     private ListsAdapter mListsAdaper;
     private Realm mRealm;
+    private LinearLayoutManager mLayoutManager;
+    private int mLastPosition = RecyclerView.NO_POSITION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements
         if (savedInstanceState != null) {
             mSelectedContent = savedInstanceState.getInt(CONTENT_KEY, ALL_CONTENT);
             mSelectedList = savedInstanceState.getString(LIST_KEY, NO_LIST);
+            mLastPosition = savedInstanceState.getInt(LIST_POSITION_KEY, RecyclerView.NO_POSITION);
         }
 
         mToggleNav = new ActionBarDrawerToggle(this,
@@ -114,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements
 
         int orientation = OrientationHelper.VERTICAL;
         boolean reverseLayout = false;
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, orientation, reverseLayout);
-        mBookmarksView.setLayoutManager(layoutManager);
+        mLayoutManager = new LinearLayoutManager(this, orientation, reverseLayout);
+        mBookmarksView.setLayoutManager(mLayoutManager);
         mBookmarksView.setHasFixedSize(true);
         mBookmarksAdapter = new BookmarksAdapter(this, this);
         mBookmarksView.setAdapter(mBookmarksAdapter);
@@ -138,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onSaveInstanceState(outState);
         outState.putInt(CONTENT_KEY, mSelectedContent);
         outState.putString(LIST_KEY, mSelectedList);
+        outState.putInt(LIST_POSITION_KEY, mLayoutManager.findFirstCompletelyVisibleItemPosition());
     }
 
     @Override
@@ -293,6 +300,10 @@ public class MainActivity extends AppCompatActivity implements
         showNothing();
         RealmResults<Bookmark> bookmarks = getBookmarks();
         mBookmarksAdapter.swapData(bookmarks);
+        if (mLastPosition != RecyclerView.NO_POSITION) {
+            mBookmarksView.scrollToPosition(mLastPosition);
+            mLastPosition = RecyclerView.NO_POSITION;
+        }
         showBookmarks();
         return bookmarks;
     }
