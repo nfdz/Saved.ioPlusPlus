@@ -5,7 +5,6 @@
     <string name="action_settings">Settings</string>
 
     <!-- Strings related to Main activity -->
-
     <string name="main_nav_drawer_open">Open bookmark lists menu</string>
     <string name="main_nav_drawer_close">Close bookmark lists menu</string>
     <string name="main_menu_header_title">Lists</string>
@@ -18,7 +17,6 @@
     <string name="main_bookmark_unable_click">Unable to open URL</string>
     <string name="main_bookmark_unable_click_search">Search</string>
 
-
     <!-- Strings related to bookmark form -->
     <string name="bookmark_form_title">Title</string>
     <string name="bookmark_form_url">URL</string>
@@ -26,6 +24,11 @@
     <string name="bookmark_form_list">List</string>
     <string name="bookmark_form_optional_hint">Optional</string>
 
+    <!-- Strings related to edit bookmark activity -->
+    <string name="edit_bookmark_button">Edit</string>
+
+    <!-- Strings related to new bookmark activity -->
+    <string name="new_bookmark_button">Save</string>
 
     <!-- Strings related to Settings -->
 

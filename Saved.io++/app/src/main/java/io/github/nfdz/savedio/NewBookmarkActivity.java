@@ -75,7 +75,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
         }
 
         // TODO store in savedInstanceState the selected list and available lists
-        mSaveButton.setText("Save");
+        mSaveButton.setText(R.string.new_bookmark_button);
         mAvailableLists.add(NO_LIST_VALUE);
         mBookmarkList.setText(NO_LIST_VALUE);
         mUrlValidator = new BookmarkFormUtils.URLTextValidator(mSaveButton);

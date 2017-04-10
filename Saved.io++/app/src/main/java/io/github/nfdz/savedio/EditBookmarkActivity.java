@@ -80,7 +80,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
         }
 
         // TODO store in savedInstanceState the selected list and available lists
-        mEditButton.setText("Edit");
+        mEditButton.setText(R.string.edit_bookmark_button);
         mAvailableLists.add(NO_LIST_VALUE);
         mUrlValidator = new BookmarkFormUtils.URLTextValidator(mEditButton);
         mBookmarkUrl.addTextChangedListener(mUrlValidator);
