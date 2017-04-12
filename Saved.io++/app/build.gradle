@@ -20,7 +20,7 @@ android {
         }
     }
     buildTypes.each {
-        it.buildConfigField 'String', 'SAVEDIO_API_DEV_KEY', '"YOUR_API_DEV_KEY"'
+        it.buildConfigField 'String', 'SAVEDIO_API_DEV_KEY', '""'
     }
 }
 
@@ -36,6 +36,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'io.realm:android-adapters:1.3.0'
     compile 'com.android.support:support-v4:25.3.0'
     compile 'com.android.support:support-vector-drawable:25.3.0'
