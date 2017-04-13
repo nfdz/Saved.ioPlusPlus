@@ -45,6 +45,7 @@ import io.github.nfdz.savedio.model.Bookmark;
 import io.github.nfdz.savedio.model.BookmarkDateComparator;
 import io.github.nfdz.savedio.model.BookmarkList;
 import io.github.nfdz.savedio.model.BookmarkTitleComparator;
+import io.github.nfdz.savedio.sync.SyncUtils;
 import io.github.nfdz.savedio.utils.TasksUtils;
 import io.github.nfdz.savedio.utils.ToolbarUtils;
 import io.realm.Realm;
@@ -132,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements
 
         mListsAdaper = new ListsAdapter(this, null);
         mNavigationListView.setAdapter(mListsAdaper);
+
+        SyncUtils.initialize(this);
     }
 
     private void updateLists() {
@@ -403,6 +406,8 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onRefresh() {
+
+        SyncUtils.startImmediateSync(this);
 
         // just testing the API
 
