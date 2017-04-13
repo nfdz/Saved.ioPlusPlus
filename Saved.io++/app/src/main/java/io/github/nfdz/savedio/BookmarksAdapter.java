@@ -25,7 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import io.github.nfdz.savedio.model.Bookmark;
-import io.github.nfdz.savedio.model.BookmarkTitleComparator;
+import io.github.nfdz.savedio.utils.LenientURL;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
@@ -101,7 +101,8 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
                 ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_on)
               : ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_off);
         holder.mFavoriteButton.setImageDrawable(favoriteDrawable);
-        String faviconPath = getFaviconPath(bookmark.getUrl());
+        String url = LenientURL.processURL(bookmark.getUrl());
+        String faviconPath = getFaviconPath(url);
         // add no poster art meanwhile Picasso is loading the poster
         Drawable noFavicon = ContextCompat.getDrawable(mContext, R.drawable.art_no_favicon);
         if (faviconPath != null) {
