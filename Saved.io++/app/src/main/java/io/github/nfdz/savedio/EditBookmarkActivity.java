@@ -222,12 +222,14 @@ public class EditBookmarkActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(url)) {
             Log.e(TAG, "URL is empty when edit button was clicked.");
         } else {
-            TasksUtils.deleteBookmark(mRealm,
+            TasksUtils.deleteBookmark(this,
+                    mRealm,
                     mBookmarkId,
                     new Callbacks.OperationCallback<Bookmark>() {
                         @Override
                         public void onSuccess(Bookmark removed) {
-                            TasksUtils.createBookmark(mRealm,
+                            TasksUtils.createBookmark(EditBookmarkActivity.this,
+                                    mRealm,
                                     editedBookmark,
                                     new Callbacks.OperationCallback<Void>() {
                                         @Override
@@ -239,7 +241,9 @@ public class EditBookmarkActivity extends AppCompatActivity {
                                             String msg = "There was an error editing bookmark: " + editedBookmark + ". " + error;
                                             Log.e(TAG, msg, th);
                                             showContent();
-                                            Toast.makeText(EditBookmarkActivity.this, msg, Toast.LENGTH_LONG).show();
+                                            Toast.makeText(EditBookmarkActivity.this,
+                                                    R.string.edit_bookmark_error,
+                                                    Toast.LENGTH_LONG).show();
                                         }
                                     });
                         }
@@ -248,7 +252,9 @@ public class EditBookmarkActivity extends AppCompatActivity {
                             String msg = "There was an error editing bookmark: " + editedBookmark + ". " + error;
                             Log.e(TAG, msg, th);
                             showContent();
-                            Toast.makeText(EditBookmarkActivity.this, msg, Toast.LENGTH_LONG).show();
+                            Toast.makeText(EditBookmarkActivity.this,
+                                    R.string.edit_bookmark_error,
+                                    Toast.LENGTH_LONG).show();
                         }
             });
         }

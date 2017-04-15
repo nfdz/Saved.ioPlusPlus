@@ -52,7 +52,6 @@ public class SyncIntentService extends IntentService {
     private static void syncBookmarks(Context context, Realm realm) {
 
         //  retrieve all bookmarks
-
         String devKey = BuildConfig.SAVEDIO_API_DEV_KEY;
         String userKey = PreferencesUtils.getUserAPIKey(context);
         // check user key is valid

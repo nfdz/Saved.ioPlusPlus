@@ -410,81 +410,6 @@ public class MainActivity extends AppCompatActivity implements
 
         SyncUtils.startImmediateSync(this);
 
-        // just testing the API
-
-//        APIHelper helper = new APIHelper();
-//
-//
-//        Call<List<BookmarkAPI>> call = helper.getAPI().retrieveAllBookmarks(BuildConfig.SAVEDIO_API_DEV_KEY,
-//                "",
-//                null, null, null);
-//
-//        call.enqueue(new Callback<List<BookmarkAPI>>() {
-//            @Override
-//            public void onResponse(Call<List<BookmarkAPI>> call, Response<List<BookmarkAPI>> response) {
-//                for (BookmarkAPI bm : response.body()) {
-//                    System.out.println("bm: "+bm.id);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<BookmarkAPI>> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
-//
-//        Call<BookmarkAPI> call = helper.getAPI().retrieveSingleBookmark(
-//                "",
-//                BuildConfig.SAVEDIO_API_DEV_KEY,
-//                "");
-//
-//        call.enqueue(new Callback<BookmarkAPI>() {
-//            @Override
-//            public void onResponse(Call<BookmarkAPI> call, Response<BookmarkAPI> response) {
-//                System.out.println("bm: "+response.body().id);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<BookmarkAPI> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
-//
-//
-//        Call<CreateBookmarkResponse> call = helper.getAPI().createBookmark(BuildConfig.SAVEDIO_API_DEV_KEY,
-//                "",
-//                "https://saved.io/", "title", null);
-//
-//        call.enqueue(new Callback<CreateBookmarkResponse>() {
-//            @Override
-//            public void onResponse(Call<CreateBookmarkResponse> call, Response<CreateBookmarkResponse> response) {
-//                System.out.println("\nCreated bookmark: " + response.body().id + "/" +
-//                        response.body().url + "/" + response.body().title);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<CreateBookmarkResponse> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
-//
-//
-//        Call<Void> call = helper.getAPI().deleteBookmark(BuildConfig.SAVEDIO_API_DEV_KEY,
-//                "",
-//                "");
-//
-//        call.enqueue(new Callback<Void>() {
-//            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                System.out.println("\nDeleted bookmark: " + response.isSuccessful());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Void> call, Throwable t) {
-//                t.printStackTrace();
-//            }
-//        });
-
         // TODO sync data from internet
         mSwipeRefresh.setRefreshing(false);
 
@@ -532,7 +457,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void deleteBookmark(final String bookmarkId) {
-        TasksUtils.deleteBookmark(mRealm,
+        TasksUtils.deleteBookmark(this,
+                mRealm,
                 bookmarkId,
                 new Callbacks.OperationCallback<Bookmark>() {
                     @Override
@@ -554,7 +480,7 @@ public class MainActivity extends AppCompatActivity implements
                                     .setAction(getString(R.string.main_bookmark_deleted_undo), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            insertBookmark(removedBookmark);
+                                            createBookmark(removedBookmark);
                                         }
                                     }).show();
                         } else {
@@ -564,13 +490,17 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onError(String msg, Throwable th) {
                         Log.e(TAG, "There was an error deleting a bookmark: " + bookmarkId+". " + msg, th);
+                        Snackbar.make(mContent,
+                                getString(R.string.main_bookmark_deleted_error),
+                                Snackbar.LENGTH_LONG).show();
                         mBookmarksAdapter.notifyDataSetChanged();
                     }
                 });
     }
 
-    private void insertBookmark(final Bookmark bookmark) {
-        TasksUtils.createBookmark(mRealm,
+    private void createBookmark(final Bookmark bookmark) {
+        TasksUtils.createBookmark(this,
+                mRealm,
                 bookmark,
                 new Callbacks.OperationCallback<Void>() {
                     @Override
@@ -580,6 +510,9 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onError(String msg, Throwable th) {
                         Log.e(TAG, "There was an error inserting a bookmark: " + bookmark + ". " + msg, th);
+                        Snackbar.make(mContent,
+                                getString(R.string.main_bookmark_deleted_undo_error),
+                                Snackbar.LENGTH_LONG).show();
                     }
                 });
     }

@@ -12,7 +12,9 @@
     <string name="main_menu_favorites">Favorites</string>
     <string name="main_content_favorites">@string/main_menu_favorites</string>
     <string name="main_bookmark_deleted">Bookmark deleted successfully</string>
+    <string name="main_bookmark_deleted_error">There was an error deleting a bookmark</string>
     <string name="main_bookmark_deleted_undo">Undo</string>
+    <string name="main_bookmark_deleted_undo_error">There was an error undoing the deletion of a bookmark</string>
     <string name="main_notify_bookmarks">Notify new bookmarks</string>
     <string name="main_bookmark_unable_click">Unable to open URL</string>
     <string name="main_bookmark_unable_click_search">Search</string>
@@ -26,9 +28,11 @@
 
     <!-- Strings related to edit bookmark activity -->
     <string name="edit_bookmark_button">Edit</string>
+    <string name="edit_bookmark_error">There was an error editing a bookmark</string>
 
     <!-- Strings related to new bookmark activity -->
     <string name="new_bookmark_button">Save</string>
+    <string name="new_bookmark_error">There was an error creating a bookmark</string>
 
     <!-- Strings related to Settings -->
 

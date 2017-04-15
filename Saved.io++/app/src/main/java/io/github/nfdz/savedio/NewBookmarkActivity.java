@@ -162,7 +162,8 @@ public class NewBookmarkActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(url)) {
             Log.e(TAG, "URL is empty when save button was clicked.");
         } else {
-            TasksUtils.createBookmark(mRealm,
+            TasksUtils.createBookmark(this,
+                    mRealm,
                     bookmark,
                     new Callbacks.OperationCallback<Void>() {
                         @Override
@@ -174,7 +175,9 @@ public class NewBookmarkActivity extends AppCompatActivity {
                             String msg = "There was an error creating a bookmark: " + bookmark + ". " + error;
                             Log.e(TAG, msg, th);
                             showContent();
-                            Toast.makeText(NewBookmarkActivity.this, msg, Toast.LENGTH_LONG).show();
+                            Toast.makeText(NewBookmarkActivity.this,
+                                    R.string.new_bookmark_error,
+                                    Toast.LENGTH_LONG).show();
                         }
                     });
         }
