@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements
     private Realm mRealm;
     private LinearLayoutManager mLayoutManager;
     private int mLastPosition = RecyclerView.NO_POSITION;
+    private SyncResultListener mResultListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +173,13 @@ public class MainActivity extends AppCompatActivity implements
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this);
 
+        // subscribe sync result
+        SyncResult result = mRealm.where(SyncResult.class).findFirst();
+        if (result != null) {
+            mResultListener = new SyncResultListener(result);
+            mResultListener.register();
+        }
+
         // update adapter comparator with preferences
         PreferencesUtils.retrievePreferredSort(this, new Callbacks.FinishCallback<String>() {
             @Override
@@ -200,6 +208,8 @@ public class MainActivity extends AppCompatActivity implements
         mSwipeRefresh.setOnRefreshListener(null);
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
+        if (mResultListener != null)mResultListener.unregister();
+        mSwipeRefresh.setRefreshing(false);
     }
 
     @Override
@@ -417,24 +427,36 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onRefresh() {
-        // subscribe sync result
-        SyncResult result = mRealm.where(SyncResult.class).findFirst();
-        if (result != null) {
-            result.addChangeListener(new RealmChangeListener<SyncResult>() {
-                @Override
-                public void onChange(SyncResult result) {
-                    result.removeChangeListener(this);
-                    String msg = getString(R.string.main_sync_result) + "\n" + result.getMessage();
-                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
-                    mSwipeRefresh.setRefreshing(false);
-                }
-            });
-        } else {
-            mSwipeRefresh.setRefreshing(false);
-        }
-
         // start sync
         SyncUtils.startImmediateSync(this);
+
+        // if it cannot know the result, finish refreshing now
+        if (mResultListener == null) {
+            mSwipeRefresh.setRefreshing(false);
+        }
+    }
+
+    private class SyncResultListener implements RealmChangeListener<SyncResult> {
+        private final SyncResult mResult;
+
+        public SyncResultListener(SyncResult result) {
+            mResult = result;
+        }
+
+        public void register() {
+            mResult.addChangeListener(this);
+        }
+
+        public void unregister() {
+            mResult.removeChangeListener(this);
+        }
+
+        @Override
+        public void onChange(SyncResult result) {
+            String msg = getString(R.string.main_sync_result) + "\n" + result.getMessage();
+            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+            mSwipeRefresh.setRefreshing(false);
+        }
     }
 
     @Override
