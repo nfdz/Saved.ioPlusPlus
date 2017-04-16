@@ -152,6 +152,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
         String notes = mBookmarkNotes.getText().toString();
         String list = mBookmarkList.getText().toString();
         if (list.equals(NO_LIST_VALUE)) list = "";
+        if (TextUtils.isEmpty(title)) title = BookmarkFormUtils.inferTitleFromURL(url);
         final Bookmark bookmark = new Bookmark();
         bookmark.setTitle(title);
         bookmark.setUrl(url);

@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
@@ -59,6 +61,23 @@ public class BookmarkFormUtils {
             }
         });
         builder.show();
+    }
+
+    public static String inferTitleFromURL(String urlString) {
+        String bestCandidate = urlString;
+        try {
+            if (!urlString.contains("://")) urlString = "http://" + urlString;
+            URL url = new URL(urlString);
+            String host = url.getHost();
+            String[] segments = url.getPath().split("/");
+            bestCandidate = host;
+            for (String segment : segments) {
+                if (!TextUtils.isEmpty(segment)) bestCandidate += " > " + segment;
+            }
+        } catch (MalformedURLException e) {
+            // swallow
+        }
+        return bestCandidate;
     }
 
     /**
