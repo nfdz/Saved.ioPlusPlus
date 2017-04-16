@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,11 +47,13 @@ import io.github.nfdz.savedio.model.Bookmark;
 import io.github.nfdz.savedio.model.BookmarkDateComparator;
 import io.github.nfdz.savedio.model.BookmarkList;
 import io.github.nfdz.savedio.model.BookmarkTitleComparator;
+import io.github.nfdz.savedio.model.SyncResult;
 import io.github.nfdz.savedio.sync.SyncUtils;
 import io.github.nfdz.savedio.utils.LenientURL;
 import io.github.nfdz.savedio.utils.TasksUtils;
 import io.github.nfdz.savedio.utils.ToolbarUtils;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 /**
@@ -136,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements
         mListsAdaper = new ListsAdapter(this, null);
         mNavigationListView.setAdapter(mListsAdaper);
 
-        SyncUtils.initialize(this);
+        SyncUtils.initialize(this, mRealm);
     }
 
     private void updateLists() {
@@ -414,12 +417,24 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onRefresh() {
+        // subscribe sync result
+        SyncResult result = mRealm.where(SyncResult.class).findFirst();
+        if (result != null) {
+            result.addChangeListener(new RealmChangeListener<SyncResult>() {
+                @Override
+                public void onChange(SyncResult result) {
+                    result.removeChangeListener(this);
+                    String msg = getString(R.string.main_sync_result) + "\n" + result.getMessage();
+                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+                    mSwipeRefresh.setRefreshing(false);
+                }
+            });
+        } else {
+            mSwipeRefresh.setRefreshing(false);
+        }
 
+        // start sync
         SyncUtils.startImmediateSync(this);
-
-        // TODO sync data from internet
-        mSwipeRefresh.setRefreshing(false);
-
     }
 
     @Override

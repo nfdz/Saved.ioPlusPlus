@@ -4,6 +4,12 @@
 
     <string name="action_settings">Settings</string>
 
+    <!-- Strings related to sync service -->
+    <string name="sync_summary_format" formatted="false">%d removed, %d created and %d updated.</string>
+    <string name="sync_api_error">User key is not valid</string>
+    <string name="sync_network_error">There are network problems</string>
+    <string name="sync_service_error">There are service problems</string>
+
     <!-- Strings related to Main activity -->
     <string name="main_nav_drawer_open">Open bookmark lists menu</string>
     <string name="main_nav_drawer_close">Close bookmark lists menu</string>
@@ -18,6 +24,7 @@
     <string name="main_notify_bookmarks">Notify new bookmarks</string>
     <string name="main_bookmark_unable_click">Unable to open URL</string>
     <string name="main_bookmark_unable_click_search">Search</string>
+    <string name="main_sync_result">Bookmark synchronization result:</string>
 
     <!-- Strings related to bookmark form -->
     <string name="bookmark_form_title">Title</string>

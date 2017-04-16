@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 
 import io.github.nfdz.savedio.Callbacks;
 import io.github.nfdz.savedio.data.PreferencesUtils;
+import io.github.nfdz.savedio.model.SyncResult;
+import io.realm.Realm;
 
 public class SyncUtils {
 
@@ -31,10 +33,21 @@ public class SyncUtils {
 
     private static boolean sInitialized = false;
 
-    synchronized public static void initialize(@NonNull final Context context) {
+    synchronized public static void initialize(@NonNull final Context context, @NonNull Realm realm) {
 
         if (sInitialized) return;
         sInitialized = true;
+
+        // initialize sync result object
+        SyncResult result = realm.where(SyncResult.class).findFirst();
+        if (result == null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.createObject(SyncResult.class);
+                }
+            });
+        }
 
         scheduleFirebaseJobDispatcherSync(context);
 

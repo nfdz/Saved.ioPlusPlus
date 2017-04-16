@@ -8,14 +8,9 @@ Android application for the bookmarking tool https://saved.io/
 
 ## TODO
 
-* Implement settings.
 * Implement notifications.
-* Implement sync service.
-* Implement api rest with retrofit and gson.
-* Pin up bookmarks.
 * Widget with pinned up bookmarks.
 * Initial dialog about privacy and open source.
-* Show date.
 
 ## 3rd party software
 
@@ -23,6 +18,9 @@ Android application for the bookmarking tool https://saved.io/
 * [Picasso](http://square.github.io/picasso/)
 * [Butter Knife](http://jakewharton.github.io/butterknife/)
 * [Google gson](https://github.com/google/gson)
+* [Retrofit](https://github.com/square/retrofit)
+* [Firebase JobDispatcher](https://github.com/firebase/firebase-jobdispatcher-android)
+* [AppIntro](https://github.com/apl-devs/AppIntro)
 
 ## License
 

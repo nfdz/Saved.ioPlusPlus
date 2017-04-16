@@ -16,9 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.nfdz.savedio.BuildConfig;
+import io.github.nfdz.savedio.R;
 import io.github.nfdz.savedio.data.PreferencesUtils;
 import io.github.nfdz.savedio.model.Bookmark;
 import io.github.nfdz.savedio.model.BookmarkList;
+import io.github.nfdz.savedio.model.SyncResult;
 import io.github.nfdz.savedio.sync.api.APIHelper;
 import io.github.nfdz.savedio.sync.api.BookmarkAPI;
 import io.realm.Realm;
@@ -28,8 +30,6 @@ import retrofit2.Response;
 public class SyncIntentService extends IntentService {
 
     public static final String SERVICE_NAME = "SyncIntentService";
-
-    public static final String SUMMARY_FORMAT = "Changes: %d removed, %d created and %d updated.";
 
     public static final String TAG = SyncIntentService.class.getSimpleName();
 
@@ -44,12 +44,18 @@ public class SyncIntentService extends IntentService {
             Realm.init(this);
             realm = Realm.getDefaultInstance();
             syncBookmarks(this, realm);
+        } catch (SyncException e) {
+            realm.beginTransaction();
+            SyncResult result = realm.where(SyncResult.class).findFirst();
+            result.setSuccess(false);
+            result.setMessage(e.getMessage());
+            realm.commitTransaction();
         } finally {
             if (realm != null) realm.close();
         }
     }
 
-    private static void syncBookmarks(Context context, Realm realm) {
+    private static void syncBookmarks(Context context, Realm realm) throws SyncException {
 
         Log.i(TAG, "Starting bookmarks synchronization.");
 
@@ -58,8 +64,7 @@ public class SyncIntentService extends IntentService {
         String userKey = PreferencesUtils.getUserAPIKey(context);
         // check user key is valid
         if (TextUtils.isEmpty(userKey)) {
-            // not valid
-            return;
+            throw new SyncException(context.getString(R.string.sync_api_error));
         }
 
         APIHelper helper = new APIHelper();
@@ -72,13 +77,11 @@ public class SyncIntentService extends IntentService {
             } else {
                 String error = res.raw().message();
                 Log.d(TAG, "Sync bookmarks error: " + error);
-                // TODO
-                return;
+                throw new SyncException(context.getString(R.string.sync_service_error));
             }
         } catch (IOException e) {
             Log.d(TAG, "Sync bookmarks error: " + e.getMessage(), e);
-            // TODO
-            return;
+            throw new SyncException(context.getString(R.string.sync_network_error), e);
         }
 
         List<String> retrievedBookmarksId = new ArrayList<>();
@@ -134,10 +137,22 @@ public class SyncIntentService extends IntentService {
             if (list.getBookmarks().isEmpty()) list.deleteFromRealm();
         }
 
+        // create summary
+        String summary = String.format(context.getString(R.string.sync_summary_format),
+                removedBookmarks.size(),
+                createdBookmarks.size(),
+                updateBookmarks.size());
+
+        // save sync result
+        SyncResult result = realm.where(SyncResult.class).findFirst();
+        if (result != null) {
+            result.setSuccess(true);
+            result.setMessage(summary);
+        }
+
         // commit data
         realm.commitTransaction();
 
-        String summary = String.format(SUMMARY_FORMAT, removedBookmarks.size(), createdBookmarks.size(), updateBookmarks.size());
         Log.i(TAG, "Bookmarks synchronization finished correctly. " + summary);
 
         // save sync time in preferences
