@@ -51,6 +51,8 @@ public class SyncIntentService extends IntentService {
 
     private static void syncBookmarks(Context context, Realm realm) {
 
+        Log.i(TAG, "Starting bookmarks synchronization.");
+
         //  retrieve all bookmarks
         String devKey = BuildConfig.SAVEDIO_API_DEV_KEY;
         String userKey = PreferencesUtils.getUserAPIKey(context);
@@ -136,7 +138,7 @@ public class SyncIntentService extends IntentService {
         realm.commitTransaction();
 
         String summary = String.format(SUMMARY_FORMAT, removedBookmarks.size(), createdBookmarks.size(), updateBookmarks.size());
-        Log.i(TAG, "Sync bookmarks finished correctly. " + summary);
+        Log.i(TAG, "Bookmarks synchronization finished correctly. " + summary);
 
         // save sync time in preferences
         long now = System.currentTimeMillis();

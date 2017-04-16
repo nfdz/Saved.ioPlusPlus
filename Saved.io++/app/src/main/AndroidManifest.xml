@@ -39,7 +39,15 @@
         </activity>
         <activity android:name=".SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <service android:name=".sync.SyncIntentService" />
+        <service android:name=".sync.SyncIntentService"
+            android:exported="false" />
+        <service
+            android:name=".sync.SyncFirebaseJobService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
