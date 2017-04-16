@@ -10,9 +10,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class BookmarkAPI {
 
-    /**
-     * Date format of date stored in "date" variable. For example: 2017-03-02 13:08:41
-     */
+    /** Date format of date stored in "date" variable. For example: 2017-03-02 13:08:41 */
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @SerializedName("bk_id")

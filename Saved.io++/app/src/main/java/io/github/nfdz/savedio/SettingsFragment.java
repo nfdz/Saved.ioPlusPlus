@@ -11,6 +11,9 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
+import io.github.nfdz.savedio.sync.SyncUtils;
+import io.github.nfdz.savedio.utils.TasksUtils;
+
 public class SettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -66,7 +69,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         if (key.equals(getString(R.string.pref_sort_key))) {
             // nothing to do
         } else if (key.equals(getString(R.string.pref_api_key))) {
-            // TODO sync data
+            SyncUtils.startImmediateSync(getContext());
         }
 
         Preference preference = findPreference(key);

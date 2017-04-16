@@ -40,19 +40,23 @@
     <string name="pref_sort_label">Sort by</string>
     <string name="pref_sort_key" translatable="false">sort</string>
 
-    <string name="pref_sort_date_label">Date</string>
-    <string name="pref_sort_date_key" translatable="false">sort-date</string>
+    <string name="pref_sort_date_last_label">Date (last first)</string>
+    <string name="pref_sort_date_last_key" translatable="false">sort-date-last</string>
+    <string name="pref_sort_date_old_label">Date (oldest first)</string>
+    <string name="pref_sort_date_old_key" translatable="false">sort-date-old</string>
     <string name="pref_sort_name_label">Name</string>
     <string name="pref_sort_name_key" translatable="false">sort-name</string>
-    <string name="pref_sort_default" translatable="false">@string/pref_sort_date_key</string>
+    <string name="pref_sort_default" translatable="false">@string/pref_sort_date_last_key</string>
 
     <string-array name="pref_sort_values_key">
-        <item>@string/pref_sort_date_key</item>
+        <item>@string/pref_sort_date_last_key</item>
+        <item>@string/pref_sort_date_old_key</item>
         <item>@string/pref_sort_name_key</item>
     </string-array>
 
     <string-array name="pref_sort_values_label">
-        <item>@string/pref_sort_date_label</item>
+        <item>@string/pref_sort_date_last_label</item>
+        <item>@string/pref_sort_date_old_label</item>
         <item>@string/pref_sort_name_label</item>
     </string-array>
 

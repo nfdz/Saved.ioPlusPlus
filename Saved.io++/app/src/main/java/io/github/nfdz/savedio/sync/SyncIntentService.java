@@ -31,7 +31,7 @@ public class SyncIntentService extends IntentService {
 
     public static final String SUMMARY_FORMAT = "Changes: %d removed, %d created and %d updated.";
 
-    public static final String TAG = SyncIntentService.class.getName();
+    public static final String TAG = SyncIntentService.class.getSimpleName();
 
     public SyncIntentService() {
         super(SERVICE_NAME);

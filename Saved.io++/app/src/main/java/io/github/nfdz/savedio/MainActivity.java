@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements
         SwipeRefreshLayout.OnRefreshListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = MainActivity.class.getName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int ALL_CONTENT = 0;
     private static final int FAVORITE_CONTENT = 1;
     private static final int LIST_CONTENT = 2;
@@ -172,11 +173,7 @@ public class MainActivity extends AppCompatActivity implements
         PreferencesUtils.retrievePreferredSort(this, new Callbacks.FinishCallback<String>() {
             @Override
             public void onFinish(String sort) {
-                if (getString(R.string.pref_sort_date_key).equals(sort)) {
-                    mBookmarksAdapter.setComparator(new BookmarkDateComparator());
-                } else {
-                    mBookmarksAdapter.setComparator(new BookmarkTitleComparator());
-                }
+                updateComparator(sort);
                 updateLists();
                 updateInfoLayout();
                 List<Bookmark> bookmarks = updateBookmarks();
@@ -215,6 +212,16 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    private void updateComparator(String sort) {
+        if (getString(R.string.pref_sort_date_last_key).equals(sort)) {
+            mBookmarksAdapter.setComparator(Collections.reverseOrder(new BookmarkDateComparator()));
+        } else if (getString(R.string.pref_sort_date_old_key).equals(sort)) {
+            mBookmarksAdapter.setComparator(new BookmarkDateComparator());
+        } else {
+            mBookmarksAdapter.setComparator(new BookmarkTitleComparator());
+        }
     }
 
     /**
@@ -421,11 +428,7 @@ public class MainActivity extends AppCompatActivity implements
             PreferencesUtils.retrievePreferredSort(this, new Callbacks.FinishCallback<String>() {
                 @Override
                 public void onFinish(String sort) {
-                    if (getString(R.string.pref_sort_date_key).equals(sort)) {
-                        mBookmarksAdapter.setComparator(new BookmarkDateComparator());
-                    } else {
-                        mBookmarksAdapter.setComparator(new BookmarkTitleComparator());
-                    }
+                    updateComparator(sort);
                 }
             });
         }

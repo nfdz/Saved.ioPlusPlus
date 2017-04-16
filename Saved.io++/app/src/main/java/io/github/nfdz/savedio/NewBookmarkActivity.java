@@ -40,7 +40,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
     /** Key of the selected list in extra data intent map and in saved instance state */
     public static final String SELECTED_LIST_KEY = "selected-list";
 
-    private static final String TAG = NewBookmarkActivity.class.getName();
+    private static final String TAG = NewBookmarkActivity.class.getSimpleName();
     private static final String NO_LIST_VALUE = "-";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;

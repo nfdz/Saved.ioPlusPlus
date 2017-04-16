@@ -11,6 +11,9 @@ import io.realm.annotations.PrimaryKey;
  */
 public class Bookmark extends RealmObject {
 
+    /** Date format of date stored in "date" variable. For example: 2017-03-02 13:08:41 */
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
     // strings with the name of attributes to ease realm queries
     public static final String FIELD_ID = "mId";
     public static final String FIELD_URL = "mUrl";

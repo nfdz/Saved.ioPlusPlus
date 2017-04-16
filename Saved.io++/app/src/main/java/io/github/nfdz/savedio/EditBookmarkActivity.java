@@ -48,7 +48,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
     public static final String WAS_EDITED_KEY = "was-edited";
 
 
-    private static final String TAG = EditBookmarkActivity.class.getName();
+    private static final String TAG = EditBookmarkActivity.class.getSimpleName();
     private static final String NO_LIST_VALUE = "-";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
