@@ -4,6 +4,13 @@
 
     <string name="action_settings">Settings</string>
 
+    <!-- Strings related to notifications -->
+    <string name="notification_list_format_long" formatted="false">%s bookmark list has changes.</string>
+    <string name="notification_list_format_short" formatted="false">%s list changes.</string>
+    <string name="notification_several_lists_long">There are bookmark changes in some lists.</string>
+    <string name="notification_several_lists_short">Bookmark lists changes.</string>
+
+
     <!-- Strings related to sync service -->
     <string name="sync_summary_format" formatted="false">%d removed, %d created and %d updated.</string>
     <string name="sync_api_error">User key is not valid</string>
@@ -21,7 +28,7 @@
     <string name="main_bookmark_deleted_error">There was an error deleting a bookmark</string>
     <string name="main_bookmark_deleted_undo">Undo</string>
     <string name="main_bookmark_deleted_undo_error">There was an error undoing the deletion of a bookmark</string>
-    <string name="main_notify_bookmarks">Notify new bookmarks</string>
+    <string name="main_notify_bookmarks">Notify changes</string>
     <string name="main_bookmark_unable_click">Unable to open URL</string>
     <string name="main_bookmark_unable_click_search">Search</string>
     <string name="main_sync_result">Bookmark synchronization result:</string>

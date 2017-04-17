@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -64,7 +65,8 @@ public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemClickListener,
         BookmarksAdapter.BookmarkOnClickHandler,
         SwipeRefreshLayout.OnRefreshListener,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        CompoundButton.OnCheckedChangeListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int ALL_CONTENT = 0;
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements
         mToggleNav.syncState();
         mNavigationListView.setOnItemClickListener(this);
         mSwipeRefresh.setOnRefreshListener(this);
+        mContentSwitch.setOnCheckedChangeListener(this);
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this);
 
@@ -206,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerLayout.removeDrawerListener(mToggleNav);
         mNavigationListView.setOnItemClickListener(null);
         mSwipeRefresh.setOnRefreshListener(null);
+        mContentSwitch.setOnCheckedChangeListener(null);
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
         if (mResultListener != null)mResultListener.unregister();
@@ -245,7 +249,15 @@ public class MainActivity extends AppCompatActivity implements
         switch (mSelectedContent) {
             case LIST_CONTENT:
                 mContentName.setText(mSelectedList);
-                mContentSwitch.setVisibility(View.VISIBLE);
+                BookmarkList list = mRealm.where(BookmarkList.class)
+                        .equalTo(BookmarkList.FIELD_LIST_NAME, mSelectedList)
+                        .findFirst();
+                if (list != null) {
+                    mContentSwitch.setChecked(list.getNotifyFlag());
+                    mContentSwitch.setVisibility(View.VISIBLE);
+                } else {
+                    mContentSwitch.setVisibility(View.GONE);
+                }
                 mContentInfo.setVisibility(View.VISIBLE);
                 break;
             case FAVORITE_CONTENT:
@@ -423,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * This method invoked by swipe refresh layout when the user pulls down the content.
+     * This method is invoked by swipe refresh layout when the user pulls down the content.
      */
     @Override
     public void onRefresh() {
@@ -434,6 +446,29 @@ public class MainActivity extends AppCompatActivity implements
         if (mResultListener == null) {
             mSwipeRefresh.setRefreshing(false);
         }
+    }
+
+    /**
+     * This method is invoked when content layout switch change.
+     * @param buttonView
+     * @param isChecked
+     */
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+        RealmUtils.setListNotificationFlag(mRealm, mSelectedList, isChecked, new Callbacks.OperationCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                // nothing to do
+            }
+            @Override
+            public void onError(String msg, Throwable th) {
+                Log.e(TAG, msg, th);
+                // revert
+                mContentSwitch.setOnCheckedChangeListener(null);
+                mContentSwitch.setChecked(!isChecked);
+                mContentSwitch.setOnCheckedChangeListener(MainActivity.this);
+            }
+        });
     }
 
     private class SyncResultListener implements RealmChangeListener<SyncResult> {

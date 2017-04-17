@@ -23,6 +23,7 @@ import io.github.nfdz.savedio.model.BookmarkList;
 import io.github.nfdz.savedio.model.SyncResult;
 import io.github.nfdz.savedio.sync.api.APIHelper;
 import io.github.nfdz.savedio.sync.api.BookmarkAPI;
+import io.github.nfdz.savedio.utils.NotificationUtils;
 import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -92,18 +93,18 @@ public class SyncIntentService extends IntentService {
         realm.beginTransaction();
 
         // remove local bookmarks not contained in remote server
-        List<String> removedBookmarks = new ArrayList<>();
+        List<Bookmark> removedBookmarks = new ArrayList<>();
         List<Bookmark> localBookmarks = realm.where(Bookmark.class).findAll();
         for (Bookmark bookmark : localBookmarks) {
             if (!retrievedBookmarksId.contains(bookmark.getId())) {
-                removedBookmarks.add(bookmark.getId());
+                removedBookmarks.add(bookmark);
                 bookmark.deleteFromRealm();
             }
         }
 
         // create or update bookmarks
-        List<String> createdBookmarks = new ArrayList<>();
-        List<String> updateBookmarks = new ArrayList<>();
+        List<Bookmark> createdBookmarks = new ArrayList<>();
+        List<Bookmark> updateBookmarks = new ArrayList<>();
         for (BookmarkAPI bm : retrievedBookmarks) {
             Bookmark bookmark = realm.where(Bookmark.class)
                     .equalTo(Bookmark.FIELD_ID, bm.id)
@@ -115,7 +116,7 @@ public class SyncIntentService extends IntentService {
                 bookmark.setDate(bm.date);
                 bookmark.setUrl(bm.url);
                 bookmark.setNotes(bm.note);
-                createdBookmarks.add(bm.id);
+                createdBookmarks.add(bookmark);
             } else {
                 boolean isEqual = bookmark.getTitle().equals(bm.title) &&
                                   bookmark.getDate().equals(bm.date) &&
@@ -126,16 +127,38 @@ public class SyncIntentService extends IntentService {
                     bookmark.setDate(bm.date);
                     bookmark.setUrl(bm.url);
                     bookmark.setNotes(bm.note);
-                    updateBookmarks.add(bm.id);
+                    updateBookmarks.add(bookmark);
                 }
             }
         }
 
-        // purge empty lists
+        // notify changes and purge empty lists
+        List<String> listsToNotify = new ArrayList<>();
         List<BookmarkList> lists = realm.where(BookmarkList.class).findAll();
         for (BookmarkList list : lists) {
-            if (list.getBookmarks().isEmpty()) list.deleteFromRealm();
+            if (list.getBookmarks().isEmpty()) {
+                list.deleteFromRealm();
+            } else if (list.getNotifyFlag()) {
+                // check if it contains any new or updated bookmark
+                boolean notify = false;
+                for (Bookmark bookmark : createdBookmarks) {
+                    if (list.getBookmarks().contains(bookmark)) {
+                        notify = true;
+                        break;
+                    }
+                }
+                if (!notify) {
+                    for (Bookmark bookmark : updateBookmarks) {
+                        if (list.getBookmarks().contains(bookmark)) {
+                            notify = true;
+                            break;
+                        }
+                    }
+                }
+                if (notify) listsToNotify.add(list.getListName());
+            }
         }
+        NotificationUtils.notifyListChanges(context, listsToNotify);
 
         // create summary
         String summary = String.format(context.getString(R.string.sync_summary_format),

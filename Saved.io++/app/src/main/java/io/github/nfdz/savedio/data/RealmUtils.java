@@ -4,7 +4,6 @@
 package io.github.nfdz.savedio.data;
 
 
-import android.telecom.Call;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -162,6 +161,31 @@ public class RealmUtils {
             @Override
             public void onError(Throwable e) {
                 callback.onError("There was an error modifying bookmark favorite flag.", e);
+            }
+        });
+    }
+
+    public static RealmAsyncTask setListNotificationFlag(Realm realm,
+                                                         final String listName,
+                                                         final boolean notifyFlag,
+                                                         final Callbacks.OperationCallback<Void> callback) {
+        return realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                BookmarkList list = realm.where(BookmarkList.class)
+                        .equalTo(BookmarkList.FIELD_LIST_NAME, listName)
+                        .findFirst();
+                list.setNofityFlag(notifyFlag);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess(null);
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable e) {
+                callback.onError("There was an error modifying list notify flag.", e);
             }
         });
     }
