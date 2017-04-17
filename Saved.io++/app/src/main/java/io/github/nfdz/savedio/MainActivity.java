@@ -207,8 +207,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         mDrawerLayout.removeDrawerListener(mToggleNav);
         mNavigationListView.setOnItemClickListener(null);
         mSwipeRefresh.setOnRefreshListener(null);
