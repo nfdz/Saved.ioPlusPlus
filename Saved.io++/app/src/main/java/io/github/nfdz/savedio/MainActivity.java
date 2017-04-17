@@ -36,7 +36,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,6 +45,7 @@ import io.github.nfdz.savedio.data.PreferencesUtils;
 import io.github.nfdz.savedio.data.RealmUtils;
 import io.github.nfdz.savedio.model.Bookmark;
 import io.github.nfdz.savedio.model.BookmarkDateComparator;
+import io.github.nfdz.savedio.model.BookmarkDateLastsComparator;
 import io.github.nfdz.savedio.model.BookmarkList;
 import io.github.nfdz.savedio.model.BookmarkTitleComparator;
 import io.github.nfdz.savedio.model.SyncResult;
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private void updateComparator(String sort) {
         if (getString(R.string.pref_sort_date_last_key).equals(sort)) {
-            mBookmarksAdapter.setComparator(Collections.reverseOrder(new BookmarkDateComparator()));
+            mBookmarksAdapter.setComparator(new BookmarkDateLastsComparator());
         } else if (getString(R.string.pref_sort_date_old_key).equals(sort)) {
             mBookmarksAdapter.setComparator(new BookmarkDateComparator());
         } else {
