@@ -74,8 +74,8 @@ public class MainActivity extends AppCompatActivity implements
     private static final int LIST_CONTENT = 2;
     private static final String NO_LIST = "";
 
-    /** Key of the selected list in saved instance state */
-    private static final String LIST_KEY = "selected-list";
+    /** Key of the selected list in intent extra data and saved instance state */
+    public static final String LIST_KEY = "selected-list";
 
     /** Key of the selected content in saved instance state */
     private static final String CONTENT_KEY = "selected-content";
@@ -119,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements
             mSelectedContent = savedInstanceState.getInt(CONTENT_KEY, ALL_CONTENT);
             mSelectedList = savedInstanceState.getString(LIST_KEY, NO_LIST);
             mLastPosition = savedInstanceState.getInt(LIST_POSITION_KEY, RecyclerView.NO_POSITION);
+        } else if (getIntent().hasExtra(LIST_KEY)) {
+            mSelectedList = getIntent().getStringExtra(LIST_KEY);
+            if (!TextUtils.isEmpty(mSelectedList)) mSelectedContent = LIST_CONTENT;
         }
 
         mToggleNav = new ActionBarDrawerToggle(this,

@@ -42,7 +42,11 @@ public class NotificationUtils {
                 .setAutoCancel(true);
 
         Intent listIntent = new Intent(context, MainActivity.class);
-        // TODO add list as extra data
+        // if there is only one list with changes, open main activity with this content list
+        if (listsToNotify.size() == 1) {
+            String listName = listsToNotify.get(0);
+            listIntent.putExtra(MainActivity.LIST_KEY, listName);
+        }
 
         TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
         taskStackBuilder.addNextIntentWithParentStack(listIntent);

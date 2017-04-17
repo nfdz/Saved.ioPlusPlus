@@ -8,8 +8,7 @@ Android application for the bookmarking tool https://saved.io/
 
 ## TODO
 
-* Implement notifications.
-* Widget with pinned up bookmarks.
+* Widget with favorite/list bookmarks.
 * Initial dialog about privacy and open source.
 
 ## 3rd party software
