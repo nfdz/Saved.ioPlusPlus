@@ -10,7 +10,7 @@ import java.util.Comparator;
  * It is not necessary to create date time objects since the serialized string format of the date
  * facilitates the work by making the order exactly the same.
  */
-public class BookmarkDateLastsComparator implements Comparator<Bookmark> {
+public class BookmarkDateLastComparator implements Comparator<Bookmark> {
     @Override
     public int compare(Bookmark bookmark1, Bookmark bookmark2) {
         if (bookmark1.isFavorite() && !bookmark2.isFavorite()) {
