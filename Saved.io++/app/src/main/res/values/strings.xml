@@ -2,6 +2,8 @@
 
     <string name="app_name">Saved.io++</string>
 
+    <string name="title_widget_favorites">Saved.io++ Favorites</string>
+
     <string name="action_settings">Settings</string>
 
     <!-- Strings related to notifications -->
