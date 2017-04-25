@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".IntroActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".NewBookmarkActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -37,26 +40,33 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".SettingsActivity"
+        <activity
+            android:name=".SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <service android:name=".sync.SyncIntentService"
+
+        <service
+            android:name=".sync.SyncIntentService"
             android:exported="false" />
         <service
             android:name=".sync.SyncFirebaseJobService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+
         <receiver
             android:name=".widget.FavoritesWidgetProvider"
-            android:label="@string/title_widget_favorites" >
+            android:label="@string/title_widget_favorites">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_favorites" />
         </receiver>
+
     </application>
 
 </manifest>

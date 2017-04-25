@@ -13,6 +13,9 @@ import io.github.nfdz.savedio.R;
 
 public class PreferencesUtils {
 
+    private static final String FINISHED_INTRO_KEY = "finished-intro";
+    private static final boolean FINISHED_INTRO_DEFAULT = false;
+
     private static final String LAST_SYNC_KEY = "last-sync";
     private static final long LAST_SYNC_DEFAULT = 0L;
 
@@ -55,12 +58,32 @@ public class PreferencesUtils {
         }.execute();
     }
 
-    public static void setLastSyncTime(final Context context,
-                                       final long lastSyncTime) {
+    public static void setLastSyncTime(Context context, long lastSyncTime) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.putLong(LAST_SYNC_KEY, lastSyncTime);
         editor.apply();
     }
 
+    public static void setFinishedIntro(Context context, boolean finished) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(FINISHED_INTRO_KEY, finished);
+        editor.apply();
+    }
+
+    public static AsyncTask retrieveFinishedIntro(final Context context,
+                                                  final Callbacks.FinishCallback<Boolean> callback) {
+        return new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+                return sp.getBoolean(FINISHED_INTRO_KEY, FINISHED_INTRO_DEFAULT);
+            }
+            @Override
+            protected void onPostExecute(Boolean pref) {
+                callback.onFinish(pref);
+            }
+        }.execute();
+    }
 }

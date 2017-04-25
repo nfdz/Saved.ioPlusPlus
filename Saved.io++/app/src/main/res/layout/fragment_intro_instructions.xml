@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/activity_vertical_padding"
+    android:paddingLeft="@dimen/activity_horizontal_padding"
+    android:paddingRight="@dimen/activity_horizontal_padding"
+    android:paddingTop="@dimen/activity_vertical_padding">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textStyle="bold"
+            android:text="@string/intro_instructions_title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:textAlignment="viewStart"
+            android:layout_marginTop="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="@string/intro_instructions_msg" />
+
+        <Button
+            android:id="@+id/bt_intro_web_api"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:background="@drawable/touch_selector_dark"
+            android:textColor="@color/white"
+            android:text="@string/intro_instructions_web_button"/>
+
+        <Button
+            android:id="@+id/bt_intro_set_api"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="@string/intro_instructions_settings_button"
+            android:background="@drawable/touch_selector_dark"
+            android:textColor="@color/white"
+            android:layout_marginBottom="60dp"/>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

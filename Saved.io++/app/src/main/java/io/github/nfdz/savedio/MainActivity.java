@@ -146,6 +146,17 @@ public class MainActivity extends AppCompatActivity implements
         mNavigationListView.setAdapter(mListsAdaper);
 
         SyncUtils.initialize(this, mRealm);
+
+        // check if it has to show introduction activity
+        PreferencesUtils.retrieveFinishedIntro(this, new Callbacks.FinishCallback<Boolean>() {
+            @Override
+            public void onFinish(Boolean result) {
+                if (!result) {
+                    Intent intent = new Intent(MainActivity.this, IntroActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void updateLists() {

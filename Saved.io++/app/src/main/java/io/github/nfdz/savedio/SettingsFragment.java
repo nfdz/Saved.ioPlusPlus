@@ -12,7 +12,6 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
 import io.github.nfdz.savedio.sync.SyncUtils;
-import io.github.nfdz.savedio.utils.TasksUtils;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {

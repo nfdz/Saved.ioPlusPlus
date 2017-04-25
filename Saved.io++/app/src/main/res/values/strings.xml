@@ -6,12 +6,24 @@
 
     <string name="action_settings">Settings</string>
 
+    <!-- Strings related to introduction activity -->
+    <string name="intro_done_button">Ok</string>
+
+    <string name="intro_warning_title">Warning</string>
+    <string name="intro_warning_msg">There is an important problem with list management. If you add a bookmark to a list from another device, the application will not be able to associate this new bookmark with the list. This is because the service administrator does not expose this information to third parties through its API. For now, it is necessary to edit these bookmarks in the application to add them to the desired list.</string>
+    <string name="intro_warning_apologies">Sorry 😢</string>
+
+    <string name="intro_instructions_title">Instructions For Use</string>
+    <string name="intro_instructions_msg">You must configure the user API key to link your account with the application.</string>
+    <string name="intro_instructions_web_button">Get User API Key</string>
+    <string name="intro_instructions_web_button_unable_format" formatted="false">Unable to open %s</string>
+    <string name="intro_instructions_settings_button">Set Up User API Key</string>
+
     <!-- Strings related to notifications -->
     <string name="notification_list_format_long" formatted="false">%s bookmark list has changes.</string>
     <string name="notification_list_format_short" formatted="false">%s list changes.</string>
     <string name="notification_several_lists_long">There are bookmark changes in some lists.</string>
     <string name="notification_several_lists_short">Bookmark lists changes.</string>
-
 
     <!-- Strings related to sync service -->
     <string name="sync_summary_format" formatted="false">%d removed, %d created and %d updated.</string>
