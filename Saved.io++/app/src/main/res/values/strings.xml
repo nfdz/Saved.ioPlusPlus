@@ -2,6 +2,8 @@
 
     <string name="app_name">Saved.io++</string>
 
+    <string name="share_add_new_bookmark">Saved.io Add new bookmark</string>
+
     <string name="title_widget_favorites">Saved.io++ Favorites</string>
 
     <string name="action_settings">Settings</string>

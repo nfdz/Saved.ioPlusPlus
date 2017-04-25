@@ -3,6 +3,7 @@
  */
 package io.github.nfdz.savedio;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -39,6 +40,9 @@ public class NewBookmarkActivity extends AppCompatActivity {
 
     /** Key of the selected list in extra data intent map and in saved instance state */
     public static final String SELECTED_LIST_KEY = "selected-list";
+
+    /** Valid mime type for extra data in intent */
+    private static final String VALID_MIME_TYPE = "text/";
 
     private static final String TAG = NewBookmarkActivity.class.getSimpleName();
     private static final String NO_LIST_VALUE = "-";
@@ -77,6 +81,20 @@ public class NewBookmarkActivity extends AppCompatActivity {
         // extract initial selection from saved state
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_LIST_KEY)) {
             initialSelection = savedInstanceState.getString(SELECTED_LIST_KEY);
+        }
+
+        // extract data from intent (add new bookmark share option)
+        if (savedInstanceState == null &&
+                getIntent() != null &&
+                getIntent().getAction() != null &&
+                getIntent().getType() != null &&
+                getIntent().hasExtra(Intent.EXTRA_TEXT)) {
+            String action = getIntent().getAction();
+            String type = getIntent().getType();
+            if (action.equals(Intent.ACTION_SEND) && type.startsWith(VALID_MIME_TYPE)) {
+                String receivedText = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                mBookmarkUrl.setText(receivedText);
+            }
         }
 
         mSaveButton.setText(R.string.new_bookmark_button);
