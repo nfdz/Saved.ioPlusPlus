@@ -59,12 +59,16 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
-
+        <service
+            android:name=".widget.FavoritesWidgetRemoteViewsService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS"  />
         <receiver
             android:name=".widget.FavoritesWidgetProvider"
             android:label="@string/title_widget_favorites">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="io.github.nfdz.savedio.ACTION_FAV_DATA_UPDATED" />
             </intent-filter>
 
             <meta-data

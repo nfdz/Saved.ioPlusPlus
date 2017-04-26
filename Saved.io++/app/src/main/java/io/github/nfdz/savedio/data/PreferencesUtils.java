@@ -36,6 +36,13 @@ public class PreferencesUtils {
         }.execute();
     }
 
+    public static String getPreferredSort(Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        String keyForSort = context.getString(R.string.pref_sort_key);
+        String defaultSort = context.getString(R.string.pref_sort_default);
+        return sp.getString(keyForSort, defaultSort);
+    }
+
     public static String getUserAPIKey(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         String keyForUserAPIKey = context.getString(R.string.pref_api_key);

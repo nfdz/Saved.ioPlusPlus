@@ -24,6 +24,7 @@ import io.github.nfdz.savedio.model.SyncResult;
 import io.github.nfdz.savedio.sync.api.APIHelper;
 import io.github.nfdz.savedio.sync.api.BookmarkAPI;
 import io.github.nfdz.savedio.utils.NotificationUtils;
+import io.github.nfdz.savedio.widget.WidgetUtils;
 import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -45,6 +46,8 @@ public class SyncIntentService extends IntentService {
             Realm.init(this);
             realm = Realm.getDefaultInstance();
             syncBookmarks(this, realm);
+            // TODO improve it in order to update only if a favorite bookmark was updated or removed
+            WidgetUtils.updateFavWidgets(this);
         } catch (SyncException e) {
             realm.beginTransaction();
             SyncResult result = realm.where(SyncResult.class).findFirst();

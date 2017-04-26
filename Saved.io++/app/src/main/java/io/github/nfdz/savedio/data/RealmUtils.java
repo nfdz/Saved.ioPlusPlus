@@ -4,6 +4,7 @@
 package io.github.nfdz.savedio.data;
 
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.github.nfdz.savedio.Callbacks;
 import io.github.nfdz.savedio.model.Bookmark;
 import io.github.nfdz.savedio.model.BookmarkList;
+import io.github.nfdz.savedio.widget.WidgetUtils;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
 
@@ -140,7 +142,8 @@ public class RealmUtils {
         });
     }
 
-    public static RealmAsyncTask setFavorite(Realm realm,
+    public static RealmAsyncTask setFavorite(final Context context,
+                                             Realm realm,
                                              final String bookmarkId,
                                              final boolean isFavorite,
                                              final Callbacks.OperationCallback<Void> callback) {
@@ -156,6 +159,7 @@ public class RealmUtils {
             @Override
             public void onSuccess() {
                 callback.onSuccess(null);
+                WidgetUtils.updateFavWidgets(context);
             }
         }, new Realm.Transaction.OnError() {
             @Override

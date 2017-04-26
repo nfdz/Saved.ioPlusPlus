@@ -17,15 +17,13 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import io.github.nfdz.savedio.model.Bookmark;
-import io.github.nfdz.savedio.utils.LenientURL;
+import io.github.nfdz.savedio.utils.URLUtils;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
@@ -101,8 +99,8 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
                 ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_on)
               : ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_off);
         holder.mFavoriteButton.setImageDrawable(favoriteDrawable);
-        String url = LenientURL.processURL(bookmark.getUrl());
-        String faviconPath = getFaviconPath(url);
+        String url = URLUtils.processURL(bookmark.getUrl());
+        String faviconPath = URLUtils.getFaviconPath(url);
         // add no poster art meanwhile Picasso is loading the poster
         Drawable noFavicon = ContextCompat.getDrawable(mContext, R.drawable.art_no_favicon);
         if (faviconPath != null) {
@@ -121,23 +119,6 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
     @Override
     public int getItemCount() {
         return mSortedData.size();
-    }
-
-    /**
-     * Tries to infer the favicon path with given URL.
-     * @param rawUrl path.
-     * @return inferred favicon path or null.
-     */
-    private String getFaviconPath(String rawUrl) {
-        String faviconPath = null;
-        try {
-            URL url = new URL(rawUrl);
-            String basePath = url.getProtocol() + "://" + url.getHost();
-            faviconPath = basePath + "/favicon.ico";
-        } catch (MalformedURLException e) {
-            // swallow
-        }
-        return faviconPath;
     }
 
     private class DataChangesListener implements RealmChangeListener<RealmResults<Bookmark>> {

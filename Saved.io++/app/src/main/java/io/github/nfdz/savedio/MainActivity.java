@@ -50,7 +50,7 @@ import io.github.nfdz.savedio.model.BookmarkList;
 import io.github.nfdz.savedio.model.BookmarkTitleComparator;
 import io.github.nfdz.savedio.model.SyncResult;
 import io.github.nfdz.savedio.sync.SyncUtils;
-import io.github.nfdz.savedio.utils.LenientURL;
+import io.github.nfdz.savedio.utils.URLUtils;
 import io.github.nfdz.savedio.utils.TasksUtils;
 import io.github.nfdz.savedio.utils.ToolbarUtils;
 import io.realm.Realm;
@@ -394,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onBookmarkClick(Bookmark bookmark) {
-        String url = LenientURL.processURL(bookmark.getUrl());
+        String url = URLUtils.processURL(bookmark.getUrl());
         Intent openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         final Intent searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);
         searchIntent.putExtra(SearchManager.QUERY, url);
@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onFavoriteClick(Bookmark bookmark) {
         // toggle favorite flag
         boolean isFavorite = !bookmark.isFavorite();
-        RealmUtils.setFavorite(mRealm, bookmark.getId(), isFavorite, new Callbacks.OperationCallback<Void>() {
+        RealmUtils.setFavorite(this, mRealm, bookmark.getId(), isFavorite, new Callbacks.OperationCallback<Void>() {
             @Override
             public void onSuccess(Void result) {
                 // nothing to do

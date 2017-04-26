@@ -4,9 +4,11 @@
 
     <string name="share_add_new_bookmark">Saved.io Add new bookmark</string>
 
-    <string name="title_widget_favorites">Saved.io++ Favorites</string>
-
     <string name="action_settings">Settings</string>
+
+    <!-- Strings related to favorites widget -->
+    <string name="title_widget_favorites">Saved.io++ Favorites</string>
+    <string name="empty_favorites_list">No favorite bookmarks</string>
 
     <!-- Strings related to introduction activity -->
     <string name="intro_done_button">Ok</string>
