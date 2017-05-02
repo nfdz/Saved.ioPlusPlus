@@ -8,7 +8,6 @@ Android application for the bookmarking tool https://saved.io/
 
 ## TODO
 
-* Widget with favorite/list bookmarks.
 * Replace warning intro slide with a privacy and open source one.
 
 ## 3rd party software

@@ -22,6 +22,7 @@ import io.github.nfdz.savedio.data.PreferencesUtils;
 public class IntroActivity extends AppIntro {
 
     private static final String USER_API_KEY_WEB = "http://saved.io/key";
+    private static final String REGISTER_WEB = "http://saved.io/register";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,23 @@ public class IntroActivity extends AppIntro {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_intro_instructions, container, false);
+            // register button
+            view.findViewById(R.id.bt_intro_web_register).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(REGISTER_WEB));
+                    PackageManager pm = IntroInstructionsFragment.this.getContext().getPackageManager();
+                    if (openIntent.resolveActivity(pm) != null) {
+                        startActivity(openIntent);
+                    } else {
+                        Snackbar.make(view,
+                                String.format(getString(R.string.intro_instructions_web_button_unable_format), REGISTER_WEB),
+                                Snackbar.LENGTH_LONG)
+                                .show();
+                    }
+                }
+            });
+            // get api key button
             view.findViewById(R.id.bt_intro_web_api).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -91,6 +109,7 @@ public class IntroActivity extends AppIntro {
                     }
                 }
             });
+            // set api key button
             view.findViewById(R.id.bt_intro_set_api).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

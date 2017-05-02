@@ -24,14 +24,17 @@
             android:textStyle="bold"
             android:text="@string/intro_instructions_title" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/bt_intro_web_register"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:textAlignment="viewStart"
+            android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="@string/intro_instructions_msg" />
+            android:background="@drawable/touch_selector_dark"
+            android:textColor="@color/white"
+            android:text="@string/intro_instructions_web_register_button"/>
 
         <Button
             android:id="@+id/bt_intro_web_api"
@@ -43,7 +46,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:background="@drawable/touch_selector_dark"
             android:textColor="@color/white"
-            android:text="@string/intro_instructions_web_button"/>
+            android:text="@string/intro_instructions_web_api_button"/>
 
         <Button
             android:id="@+id/bt_intro_set_api"
