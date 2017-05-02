@@ -15,7 +15,7 @@
 
     <string name="intro_warning_title">Warning</string>
     <string name="intro_warning_msg">There is an important problem with list management. If you add a bookmark to a list from another device, the application will not be able to associate this new bookmark with the list. This is because the service administrator does not expose this information to third parties through its API. For now, it is necessary to edit these bookmarks in the application to add them to the desired list.</string>
-    <string name="intro_warning_apologies">Sorry 😢</string>
+    <string name="intro_warning_apologies">Sorry :(</string>
 
     <string name="intro_instructions_title">Instructions For Use</string>
     <string name="intro_instructions_msg">You must configure the user API key to link your account with the application.</string>

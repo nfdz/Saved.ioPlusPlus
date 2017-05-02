@@ -17,8 +17,6 @@ import android.widget.RemoteViewsService;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -76,18 +74,6 @@ public class FavoritesWidgetRemoteViewsService extends RemoteViewsService {
         return null;
     }
 
-    private String getFaviconPath(String rawUrl) {
-        String faviconPath = null;
-        try {
-            URL url = new URL(rawUrl);
-            String basePath = url.getProtocol() + "://" + url.getHost();
-            faviconPath = basePath + "/favicon.ico";
-        } catch (MalformedURLException e) {
-            // swallow
-        }
-        return faviconPath;
-    }
-
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new RemoteViewsFactory() {
@@ -136,8 +122,12 @@ public class FavoritesWidgetRemoteViewsService extends RemoteViewsService {
                     }
                 }
                 if (favicon == null) {
-                    //Drawable noFavicon = ContextCompat.getDrawable(mContext, R.drawable.art_no_favicon);
-                    views.setImageViewResource(R.id.widget_iv_bookmark_item_favicon, R.drawable.art_no_favicon);
+                    // use bitmap only if it is under 21
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                        views.setImageViewResource(R.id.widget_iv_bookmark_item_favicon, R.drawable.art_no_favicon_png);
+                    } else {
+                        views.setImageViewResource(R.id.widget_iv_bookmark_item_favicon, R.drawable.art_no_favicon);
+                    }
                 }
 
                 views.setTextViewText(R.id.widget_tv_bookmark_item_name, bookmark.getTitle());

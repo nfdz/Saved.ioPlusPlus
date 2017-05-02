@@ -4,20 +4,17 @@
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/widget_favorites_item_height"
+    android:background="@drawable/widget_touch_selector"
     android:id="@+id/widget_fav_list_item">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/touch_selector">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/widget_iv_bookmark_item_favicon"
@@ -27,17 +24,18 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/art_no_favicon" />
+            tools:src="@drawable/art_no_favicon" />
 
         <TextView
             android:id="@+id/widget_tv_bookmark_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="12dp"
             android:textColor="@color/black"
-            android:textSize="17sp"
-            tools:text="Bookmark Name" />
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Bookmark Title" />
 
     </LinearLayout>
 

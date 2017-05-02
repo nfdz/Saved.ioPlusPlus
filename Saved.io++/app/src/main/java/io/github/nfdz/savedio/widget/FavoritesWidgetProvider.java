@@ -10,16 +10,12 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
 import io.github.nfdz.savedio.MainActivity;
 import io.github.nfdz.savedio.R;
-import io.github.nfdz.savedio.data.RealmUtils;
 
 public class FavoritesWidgetProvider extends AppWidgetProvider {
 
@@ -32,6 +28,13 @@ public class FavoritesWidgetProvider extends AppWidgetProvider {
             Intent intent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             views.setOnClickPendingIntent(R.id.widget_fav_bar, pendingIntent);
+
+            // set logo programmatically to avoid problems with vectors, use bitmap only if it is under 21
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                views.setImageViewResource(R.id.widget_fav_bar_logo, R.drawable.ic_logo_png);
+            } else {
+                views.setImageViewResource(R.id.widget_fav_bar_logo, R.drawable.ic_logo);
+            }
 
             // set up the collection
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {

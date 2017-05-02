@@ -9,4 +9,8 @@
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+
+    <color name="widgetBackground">#7FFFFFFF</color>
+    <color name="widgetItemBackground">#CCFFFFFF</color>
 </resources>

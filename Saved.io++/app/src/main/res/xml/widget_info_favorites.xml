@@ -4,5 +4,5 @@
     android:minHeight="@dimen/widget_favorites_default_height"
     android:minWidth="@dimen/widget_favorites_default_width"
     android:updatePeriodMillis="0"
-    android:previewImage="@drawable/ic_logo_launcher"
+    android:previewImage="@drawable/widget_favorites_preview"
     android:resizeMode="horizontal|vertical"/>
