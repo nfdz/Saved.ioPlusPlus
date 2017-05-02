@@ -76,20 +76,20 @@
     <string name="pref_sort_date_last_key" translatable="false">sort-date-last</string>
     <string name="pref_sort_date_old_label">Date (oldest first)</string>
     <string name="pref_sort_date_old_key" translatable="false">sort-date-old</string>
-    <string name="pref_sort_name_label">Name</string>
-    <string name="pref_sort_name_key" translatable="false">sort-name</string>
+    <string name="pref_sort_title_label">Title</string>
+    <string name="pref_sort_title_key" translatable="false">sort-title</string>
     <string name="pref_sort_default" translatable="false">@string/pref_sort_date_last_key</string>
 
     <string-array name="pref_sort_values_key">
         <item>@string/pref_sort_date_last_key</item>
         <item>@string/pref_sort_date_old_key</item>
-        <item>@string/pref_sort_name_key</item>
+        <item>@string/pref_sort_title_key</item>
     </string-array>
 
     <string-array name="pref_sort_values_label">
         <item>@string/pref_sort_date_last_label</item>
         <item>@string/pref_sort_date_old_label</item>
-        <item>@string/pref_sort_name_label</item>
+        <item>@string/pref_sort_title_label</item>
     </string-array>
 
     <!-- User API key settings -->
