@@ -15,7 +15,13 @@
     <string name="intro_done_button">Ok</string>
 
     <string name="intro_warning_title">Warning</string>
-    <string name="intro_warning_msg">There is an important problem with list management. If you add a bookmark to a list from another device, the application will not be able to associate this new bookmark with the list. This is because the service administrator does not expose this information to third parties through its API. For now, it is necessary to edit these bookmarks in the application to add them to the desired list.</string>
+    <string name="intro_warning_msg">There is an important problem with list management.\
+        If you add a bookmark to a list from another device,\
+        the application will not be able to associate this new\
+        bookmark with the list. This is because the service
+        administrator does not expose this information to third
+        parties through its API. For now, it is necessary to
+        edit these bookmarks in the application to add them to the desired list.</string>
     <string name="intro_warning_apologies">Sorry :(</string>
 
     <string name="intro_instructions_title">Instructions</string>
@@ -51,6 +57,9 @@
     <string name="main_bookmark_unable_click">Unable to open URL</string>
     <string name="main_bookmark_unable_click_search">Search</string>
     <string name="main_sync_result">Bookmark synchronization result:</string>
+    <string name="main_dialog_search_ok">Search</string>
+    <string name="main_dialog_search_title">Search</string>
+
 
     <!-- Strings related to bookmark form -->
     <string name="bookmark_form_title">Title</string>
@@ -58,6 +67,11 @@
     <string name="bookmark_form_notes">Notes</string>
     <string name="bookmark_form_list">List</string>
     <string name="bookmark_form_optional_hint">Optional</string>
+    <string name="bookmark_form_dialog_add_list_ok">Add</string>
+    <string name="bookmark_form_dialog_add_list_title">Add a new list</string>
+    <string name="bookmark_form_dialog_select_list_title">Select list</string>
+    <string name="bookmark_form_create_list_error_empty">List name must not be empty</string>
+    <string name="bookmark_form_create_list_error_chars">List name must contains only alphabetic (a-z) and numeric (0-9) characters</string>
 
     <!-- Strings related to edit bookmark activity -->
     <string name="edit_bookmark_button">Edit</string>

@@ -6,6 +6,7 @@ package io.github.nfdz.savedio.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
@@ -19,6 +20,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
+
+import io.github.nfdz.savedio.R;
 
 /**
  * This class contains static methods to ease work with bookmark form layout.
@@ -49,7 +52,7 @@ public class BookmarkFormUtils {
         }
         // ask user new selection
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Select list");
+        builder.setTitle(R.string.bookmark_form_dialog_select_list_title);
         final int selected = selectedListPos;
         builder.setSingleChoiceItems(options, selected, new DialogInterface.OnClickListener() {
             @Override
@@ -91,7 +94,7 @@ public class BookmarkFormUtils {
                                       final List<String> availableLists,
                                       final TextView bookmarkList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Add a new list");
+        builder.setTitle(R.string.bookmark_form_dialog_add_list_title);
         final EditText input = new EditText(context);
         // center input edit text if it is possible
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -99,7 +102,7 @@ public class BookmarkFormUtils {
         }
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.bookmark_form_dialog_add_list_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String list = input.getText().toString().toLowerCase();
@@ -132,11 +135,11 @@ public class BookmarkFormUtils {
     private static boolean checkValidListName(Context context, String listName) {
         boolean isEmpty = listName == null || listName.isEmpty();
         if (isEmpty) {
-            showCreateListError(context, "List name must not be empty");
+            showCreateListError(context, R.string.bookmark_form_create_list_error_empty);
             return false;
         }
         if (!checkCharsListName(listName)) {
-            showCreateListError(context, "List name must contains only alphabetic (a-z) and numeric (0-9) characters");
+            showCreateListError(context, R.string.bookmark_form_create_list_error_chars);
             return false;
         }
         return true;
@@ -151,9 +154,9 @@ public class BookmarkFormUtils {
         return true;
     }
 
-    private static void showCreateListError(Context context, String msg) {
+    private static void showCreateListError(Context context, @StringRes int msgId) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-        builder1.setMessage(msg);
+        builder1.setMessage(msgId);
         builder1.setCancelable(false);
         builder1.setPositiveButton(
                 android.R.string.ok,

@@ -5,16 +5,19 @@ package io.github.nfdz.savedio;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.preference.PreferenceManager;
@@ -23,6 +26,7 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +35,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -251,7 +256,11 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem item = menu.findItem(R.id.action_search);
-        mSearchView.setMenuItem(item);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Material search view does not work properly with versions under lollipop:
+            // https://github.com/MiguelCatalan/MaterialSearchView/issues
+            mSearchView.setMenuItem(item);
+        }
         return true;
     }
 
@@ -329,11 +338,51 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
+            return true;
+        } else if (id == R.id.action_search && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            // Material search view does not work properly with versions under lollipop:
+            // https://github.com/MiguelCatalan/MaterialSearchView/issues
+            boolean isFiltered = !TextUtils.isEmpty(mBookmarksAdapter.getFilter());
+            if (!isFiltered) {
+                // ask the filter and set it
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.main_dialog_search_title);
+                final EditText input = new EditText(this);
+                // center input edit text if it is possible
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    input.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                }
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+                builder.setPositiveButton(R.string.main_dialog_search_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String filter = input.getText().toString();
+                        if (!TextUtils.isEmpty(filter)) {
+                            mBookmarksAdapter.setFilter(filter);
+                            item.setIcon(R.drawable.ic_search_ongoing);
+                        }
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            } else {
+                // clear current filter
+                mBookmarksAdapter.setFilter(null);
+                item.setIcon(R.drawable.ic_search);
+            }
+
             return true;
         }
         return super.onOptionsItemSelected(item);

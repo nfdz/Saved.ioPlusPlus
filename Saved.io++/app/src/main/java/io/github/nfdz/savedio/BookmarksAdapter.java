@@ -112,6 +112,10 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
         notifyDataSetChanged();
     }
 
+    public String getFilter() {
+        return mFilter;
+    }
+
     @Override
     public BookmarksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layoutId = R.layout.bookmark_list_item;

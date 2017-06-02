@@ -6,7 +6,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "io.github.nfdz.savedio"
-        minSdkVersion 16
+        minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -43,6 +43,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.0'
     compile 'com.android.support:support-vector-drawable:25.3.0'
     compile 'com.github.paolorotolo:appintro:4.1.0'
-    compile 'com.miguelcatalan:materialsearchview:1.0.0'
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
