@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements
         boolean reverseLayout = false;
         mLayoutManager = new LinearLayoutManager(this, orientation, reverseLayout);
         mBookmarksView.setLayoutManager(mLayoutManager);
-        mBookmarksView.setHasFixedSize(true);
+        mBookmarksView.setHasFixedSize(false);
         mBookmarksAdapter = new BookmarksAdapter(this, this);
         mBookmarksView.setAdapter(mBookmarksAdapter);
 
