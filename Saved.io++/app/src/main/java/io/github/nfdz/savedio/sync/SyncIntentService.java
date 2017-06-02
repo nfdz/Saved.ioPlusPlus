@@ -72,25 +72,52 @@ public class SyncIntentService extends IntentService {
         }
 
         APIHelper helper = new APIHelper();
-        Call<List<BookmarkAPI>> call = helper.getAPI().retrieveAllBookmarks(devKey,userKey, null,null,null);
-        List<BookmarkAPI> retrievedBookmarks = null;
-        try {
-            Response<List<BookmarkAPI>> res = call.execute();
-            if (res.isSuccessful()) {
-                retrievedBookmarks = res.body();
-            } else {
-                String error = res.raw().message();
-                Log.d(TAG, "Sync bookmarks error: " + error);
-                throw new SyncException(context.getString(R.string.sync_service_error));
-            }
-        } catch (IOException e) {
-            Log.d(TAG, "Sync bookmarks error: " + e.getMessage(), e);
-            throw new SyncException(context.getString(R.string.sync_network_error), e);
-        }
+        final int limit = 50;
+        final String noList = null;
 
-        List<String> retrievedBookmarksId = new ArrayList<>();
-        for (BookmarkAPI bm : retrievedBookmarks) {
-            retrievedBookmarksId.add(bm.id);
+        // Notes:
+        // - First page is 1 because 0 returns the same response
+        // - It will not returns an empty response ever, it repeats the last page.
+        //   So it has to check if the last page is the same that the last one
+        int page = 1;
+        List<BookmarkAPI> allRetrievedBms = new ArrayList<>();
+        List<BookmarkAPI> retrievedBms;
+        String lastOneId = null;
+        boolean exit = false;
+        do {
+            Call<List<BookmarkAPI>> call = helper.getAPI().retrieveAllBookmarks(devKey, userKey, page, limit, noList);
+            try {
+                Response<List<BookmarkAPI>> res = call.execute();
+                if (res.isSuccessful()) {
+                    retrievedBms = res.body();
+                    if (!retrievedBms.isEmpty()) {
+                        String newLastOneId = retrievedBms.get(retrievedBms.size() - 1).id;
+                        if (lastOneId != null && lastOneId.equals(newLastOneId)) {
+                            exit = true;
+                        } else {
+                            Log.d(TAG, "Sync bookmarks - page=" + page + " - size=" + retrievedBms.size());
+                            page++;
+                            allRetrievedBms.addAll(retrievedBms);
+                            lastOneId = newLastOneId;
+                        }
+                    } else {
+                        exit = true;
+                    }
+                } else {
+                    String error = res.raw().message();
+                    Log.d(TAG, "Sync bookmarks error (page=" + page + "): " + error);
+                    throw new SyncException(context.getString(R.string.sync_service_error));
+                }
+            } catch (IOException e) {
+                Log.d(TAG, "Sync bookmarks error (page=" + page + "): " + e.getMessage(), e);
+                throw new SyncException(context.getString(R.string.sync_network_error), e);
+            }
+        } while(!exit);
+
+
+        List<String> allRetrievedBmsId = new ArrayList<>();
+        for (BookmarkAPI bm : allRetrievedBms) {
+            allRetrievedBmsId.add(bm.id);
         }
 
         realm.beginTransaction();
@@ -99,7 +126,7 @@ public class SyncIntentService extends IntentService {
         List<Bookmark> removedBookmarks = new ArrayList<>();
         List<Bookmark> localBookmarks = realm.where(Bookmark.class).findAll();
         for (Bookmark bookmark : localBookmarks) {
-            if (!retrievedBookmarksId.contains(bookmark.getId())) {
+            if (!allRetrievedBmsId.contains(bookmark.getId())) {
                 removedBookmarks.add(bookmark);
                 bookmark.deleteFromRealm();
             }
@@ -108,7 +135,7 @@ public class SyncIntentService extends IntentService {
         // create or update bookmarks
         List<Bookmark> createdBookmarks = new ArrayList<>();
         List<Bookmark> updateBookmarks = new ArrayList<>();
-        for (BookmarkAPI bm : retrievedBookmarks) {
+        for (BookmarkAPI bm : allRetrievedBms) {
             Bookmark bookmark = realm.where(Bookmark.class)
                     .equalTo(Bookmark.FIELD_ID, bm.id)
                     .findFirst();
