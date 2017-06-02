@@ -5,11 +5,13 @@ package io.github.nfdz.savedio.sync;
 
 
 import android.os.AsyncTask;
+import android.text.TextUtils;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 
 import io.github.nfdz.savedio.Callbacks;
+import io.github.nfdz.savedio.R;
 import io.github.nfdz.savedio.data.PreferencesUtils;
 
 public class SyncFirebaseJobService extends JobService {
@@ -23,7 +25,10 @@ public class SyncFirebaseJobService extends JobService {
             public void onFinish(Long lastSync) {
                 long now = System.currentTimeMillis();
                 if (now - lastSync > SyncUtils.SYNC_INTERVAL_MILLIS) {
-                    SyncUtils.startImmediateSync(SyncFirebaseJobService.this);
+                    String userKey = PreferencesUtils.getUserAPIKey(SyncFirebaseJobService.this);
+                    if (!TextUtils.isEmpty(userKey)) {
+                        SyncUtils.startImmediateSync(SyncFirebaseJobService.this);
+                    }
                 }
             }
         });

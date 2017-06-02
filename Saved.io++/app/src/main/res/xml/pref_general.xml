@@ -18,6 +18,7 @@
         android:title="@string/pref_api_label"
         android:key="@string/pref_api_key"
         android:defaultValue="@string/pref_api_default"
+        android:summary="@string/pref_api_warning"
         android:singleLine="true"
         android:inputType="text" />
 

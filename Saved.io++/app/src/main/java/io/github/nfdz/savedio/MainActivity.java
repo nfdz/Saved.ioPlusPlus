@@ -198,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerLayout.addDrawerListener(mToggleNav);
         mToggleNav.syncState();
         mNavigationListView.setOnItemClickListener(this);
+        mSwipeRefresh.setEnabled(!TextUtils.isEmpty(PreferencesUtils.getUserAPIKey(this)));
         mSwipeRefresh.setOnRefreshListener(this);
         mContentSwitch.setOnCheckedChangeListener(this);
         PreferenceManager.getDefaultSharedPreferences(this)
@@ -611,6 +612,8 @@ public class MainActivity extends AppCompatActivity implements
                     updateComparator(sort);
                 }
             });
+        } else if (key.equals(getString(R.string.pref_api_key))) {
+            mSwipeRefresh.setEnabled(!TextUtils.isEmpty(PreferencesUtils.getUserAPIKey(this)));
         }
     }
 

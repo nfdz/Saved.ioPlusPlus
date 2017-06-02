@@ -10,8 +10,10 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
+import android.text.TextUtils;
 import android.util.Log;
 
+import io.github.nfdz.savedio.data.PreferencesUtils;
 import io.github.nfdz.savedio.data.RealmUtils;
 import io.github.nfdz.savedio.sync.SyncUtils;
 import io.realm.Realm;
@@ -47,11 +49,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         int count = prefScreen.getPreferenceCount();
         for (int i = 0; i < count; i++) {
             Preference p = prefScreen.getPreference(i);
-            if (!(p instanceof CheckBoxPreference)) {
+            if (shouldSetSummary(p)) {
                 String value = sharedPreferences.getString(p.getKey(), "");
                 setPreferenceSummary(p, value);
             }
         }
+    }
+
+    private boolean shouldSetSummary(Preference p) {
+        return !(p instanceof CheckBoxPreference) && !p.getKey().equals(getString(R.string.pref_api_key));
     }
 
     @Override
@@ -73,7 +79,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         if (key.equals(getString(R.string.pref_sort_key))) {
             // nothing to do
         } else if (key.equals(getString(R.string.pref_api_key))) {
-            SyncUtils.startImmediateSync(getContext());
+            if (!TextUtils.isEmpty(PreferencesUtils.getUserAPIKey(getContext()))) {
+                SyncUtils.startImmediateSync(getContext());
+            }
         } else if (key.equals(getString(R.string.pref_smart_key))) {
             Realm realm = null;
             try {
@@ -88,7 +96,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
         Preference preference = findPreference(key);
         if (preference != null) {
-            if (!(preference instanceof CheckBoxPreference)) {
+            if (shouldSetSummary(preference)) {
                 setPreferenceSummary(preference, sharedPreferences.getString(key, ""));
             }
         }

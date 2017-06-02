@@ -14,17 +14,17 @@
     <!-- Strings related to introduction activity -->
     <string name="intro_done_button">Ok</string>
 
-    <string name="intro_warning_title">Warning</string>
-    <string name="intro_warning_msg">There is an important problem with list management.\
-        If you add a bookmark to a list from another device,\
-        the application will not be able to associate this new\
-        bookmark with the list. This is because the service
-        administrator does not expose this information to third
-        parties through its API. For now, it is necessary to
-        edit these bookmarks in the application to add them to the desired list.</string>
+    <string name="intro_warning_title">Hello!</string>
+    <string name="intro_warning_msg">This app respects your privacy.
+        It is free software (GPLv3) and its code is public. Feel free to check it on GitHub. \n\n
+        In the current version there is a problem with the lists in online mode because Saved.io does not provide the lists.
+        So if you have created a bookmark in a list from the web, it will appear as listless in the app.</string>
     <string name="intro_warning_apologies">Sorry :(</string>
 
     <string name="intro_instructions_title">Instructions</string>
+    <string name="intro_instructions_offline_title">Offline</string>
+    <string name="intro_instructions_offline_content">Just click OK and start using the app.</string>
+    <string name="intro_instructions_online_title">Online</string>
     <string name="intro_instructions_web_register_button">Register</string>
     <string name="intro_instructions_web_api_button">Get User API Key</string>
     <string name="intro_instructions_web_button_unable_format" formatted="false">Unable to open %s</string>
@@ -111,6 +111,7 @@
     <string name="pref_api_label">User API key</string>
     <string name="pref_api_key" translatable="false">user-api-key</string>
     <string name="pref_api_default" translatable="false"></string>
+    <string name="pref_api_warning">Set an empty key to work offline. The synchronization process could remove current bookmarks.</string>
 
     <!-- Smart favorites settings -->
     <string name="pref_smart_label">Smart favorites</string>

@@ -6,6 +6,7 @@ package io.github.nfdz.savedio.sync;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;
@@ -56,7 +57,10 @@ public class SyncUtils {
             public void onFinish(Long lastSync) {
                 long now = System.currentTimeMillis();
                 if (now - lastSync > SYNC_INTERVAL_MILLIS) {
-                    startImmediateSync(context);
+                    String userKey = PreferencesUtils.getUserAPIKey(context);
+                    if (!TextUtils.isEmpty(userKey)) {
+                        SyncUtils.startImmediateSync(context);
+                    }
                 }
             }
         });
