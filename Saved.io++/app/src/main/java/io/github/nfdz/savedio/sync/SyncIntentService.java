@@ -171,10 +171,8 @@ public class SyncIntentService extends IntentService {
 
         // save sync result
         SyncResult result = realm.where(SyncResult.class).findFirst();
-        if (result != null) {
-            result.setSuccess(true);
-            result.setMessage(summary);
-        }
+        result.setSuccess(true);
+        result.setMessage(summary);
 
         // commit data
         realm.commitTransaction();

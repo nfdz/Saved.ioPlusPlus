@@ -50,6 +50,13 @@ public class PreferencesUtils {
         return sp.getString(keyForUserAPIKey, defaultUserAPIKey);
     }
 
+    public static boolean getSmartFavoritesFlag(Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.pref_smart_key);
+        boolean defaultFlag = context.getResources().getBoolean(R.bool.pref_smart_default);
+        return sp.getBoolean(key, defaultFlag);
+    }
+
     public static AsyncTask retrieveLastSyncTime(final Context context,
                                                  final Callbacks.FinishCallback<Long> callback) {
         return new AsyncTask<Void, Void, Long>() {

@@ -1,5 +1,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <CheckBoxPreference
+        android:title="@string/pref_smart_label"
+        android:key="@string/pref_smart_key"
+        android:defaultValue="@bool/pref_smart_default"
+        android:summaryOff="@string/pref_smart_sum_off"
+        android:summaryOn="@string/pref_smart_sum_on" />
+
     <ListPreference
         android:title="@string/pref_sort_label"
         android:key="@string/pref_sort_key"

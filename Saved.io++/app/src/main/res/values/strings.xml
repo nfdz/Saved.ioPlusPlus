@@ -97,4 +97,10 @@
     <string name="pref_api_key" translatable="false">user-api-key</string>
     <string name="pref_api_default" translatable="false"></string>
 
+    <!-- Smart favorites settings -->
+    <string name="pref_smart_label">Smart favorites</string>
+    <string name="pref_smart_key" translatable="false">smart-favorites</string>
+    <string name="pref_smart_sum_on">The ten most used bookmarks will be automatically marked as favorites. This action will delete the current favorites.</string>
+    <string name="pref_smart_sum_off">Select favorites by clicking on the icon. This action will delete the current favorites.</string>
+
 </resources>

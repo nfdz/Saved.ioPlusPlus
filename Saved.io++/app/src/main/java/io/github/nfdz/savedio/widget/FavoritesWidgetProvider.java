@@ -37,11 +37,7 @@ public class FavoritesWidgetProvider extends AppWidgetProvider {
             }
 
             // set up the collection
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                setRemoteAdapter(context, views);
-            } else {
-                setRemoteAdapterV11(context, views);
-            }
+            views.setRemoteAdapter(R.id.widget_fav_list, new Intent(context, FavoritesWidgetRemoteViewsService.class));
 
             // create template intent for list item
             Intent openIntent = new Intent(Intent.ACTION_VIEW);
@@ -64,15 +60,4 @@ public class FavoritesWidgetProvider extends AppWidgetProvider {
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_fav_list);
         }
     }
-
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    private void setRemoteAdapter(Context context, @NonNull final RemoteViews views) {
-        views.setRemoteAdapter(R.id.widget_fav_list, new Intent(context, FavoritesWidgetRemoteViewsService.class));
-    }
-
-    @SuppressWarnings("deprecation")
-    private void setRemoteAdapterV11(Context context, @NonNull final RemoteViews views) {
-        views.setRemoteAdapter(0, R.id.widget_fav_list, new Intent(context, FavoritesWidgetRemoteViewsService.class));
-    }
-
 }

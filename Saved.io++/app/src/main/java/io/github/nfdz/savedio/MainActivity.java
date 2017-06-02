@@ -192,10 +192,8 @@ public class MainActivity extends AppCompatActivity implements
 
         // subscribe sync result
         SyncResult result = mRealm.where(SyncResult.class).findFirst();
-        if (result != null) {
-            mResultListener = new SyncResultListener(result);
-            mResultListener.register();
-        }
+        mResultListener = new SyncResultListener(result);
+        mResultListener.register();
 
         // update adapter comparator with preferences
         PreferencesUtils.retrievePreferredSort(this, new Callbacks.FinishCallback<String>() {
@@ -226,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements
         mContentSwitch.setOnCheckedChangeListener(null);
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
-        if (mResultListener != null)mResultListener.unregister();
+        mResultListener.unregister();
         mSwipeRefresh.setRefreshing(false);
     }
 
@@ -393,32 +391,48 @@ public class MainActivity extends AppCompatActivity implements
      * @param bookmark
      */
     @Override
-    public void onBookmarkClick(Bookmark bookmark) {
-        String url = URLUtils.processURL(bookmark.getUrl());
-        Intent openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        final Intent searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);
-        searchIntent.putExtra(SearchManager.QUERY, url);
-        PackageManager pm = getPackageManager();
+    public void onBookmarkClick(final Bookmark bookmark) {
+        RealmUtils.incrementClickCounter(this,
+                mRealm,
+                bookmark.getId(),
+                new Callbacks.OperationCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                openBookmark();
+            }
+            @Override
+            public void onError(String msg, Throwable th) {
+                Log.e(TAG, "There was an error incrementing bookmark click counter. " + msg, th);
+                openBookmark();
+            }
+            private void openBookmark() {
+                String url = URLUtils.processURL(bookmark.getUrl());
+                Intent openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                final Intent searchIntent = new Intent(Intent.ACTION_WEB_SEARCH);
+                searchIntent.putExtra(SearchManager.QUERY, url);
+                PackageManager pm = getPackageManager();
 
-        if (openIntent.resolveActivity(pm) != null) {
-            startActivity(openIntent);
-        } else if (searchIntent.resolveActivity(pm) != null) {
-            Snackbar.make(mContent,
-                    getString(R.string.main_bookmark_unable_click),
-                    Snackbar.LENGTH_LONG)
-                    .setAction(getString(R.string.main_bookmark_unable_click_search), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            startActivity(searchIntent);
-                        }
-                    })
-                    .show();
-        } else {
-            Snackbar.make(mContent,
-                    getString(R.string.main_bookmark_unable_click),
-                    Snackbar.LENGTH_LONG)
-                    .show();
-        }
+                if (openIntent.resolveActivity(pm) != null) {
+                    startActivity(openIntent);
+                } else if (searchIntent.resolveActivity(pm) != null) {
+                    Snackbar.make(mContent,
+                            getString(R.string.main_bookmark_unable_click),
+                            Snackbar.LENGTH_LONG)
+                            .setAction(getString(R.string.main_bookmark_unable_click_search), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    startActivity(searchIntent);
+                                }
+                            })
+                            .show();
+                } else {
+                    Snackbar.make(mContent,
+                            getString(R.string.main_bookmark_unable_click),
+                            Snackbar.LENGTH_LONG)
+                            .show();
+                }
+            }
+        });
     }
 
     /**
@@ -434,18 +448,20 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onFavoriteClick(Bookmark bookmark) {
-        // toggle favorite flag
-        boolean isFavorite = !bookmark.isFavorite();
-        RealmUtils.setFavorite(this, mRealm, bookmark.getId(), isFavorite, new Callbacks.OperationCallback<Void>() {
-            @Override
-            public void onSuccess(Void result) {
-                // nothing to do
-            }
-            @Override
-            public void onError(String msg, Throwable th) {
-                Log.e(TAG, msg, th);
-            }
-        });
+        if (!PreferencesUtils.getSmartFavoritesFlag(this)) {
+            // toggle favorite flag
+            boolean isFavorite = !bookmark.isFavorite();
+            RealmUtils.setFavorite(this, mRealm, bookmark.getId(), isFavorite, new Callbacks.OperationCallback<Void>() {
+                @Override
+                public void onSuccess(Void result) {
+                    // nothing to do
+                }
+                @Override
+                public void onError(String msg, Throwable th) {
+                    Log.e(TAG, msg, th);
+                }
+            });
+        }
     }
 
     /**

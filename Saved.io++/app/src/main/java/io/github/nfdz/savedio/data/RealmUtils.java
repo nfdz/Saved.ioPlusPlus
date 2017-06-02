@@ -8,11 +8,13 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.github.nfdz.savedio.Callbacks;
 import io.github.nfdz.savedio.model.Bookmark;
+import io.github.nfdz.savedio.model.BookmarkClicksComparator;
 import io.github.nfdz.savedio.model.BookmarkList;
 import io.github.nfdz.savedio.widget.WidgetUtils;
 import io.realm.Realm;
@@ -165,6 +167,109 @@ public class RealmUtils {
             @Override
             public void onError(Throwable e) {
                 callback.onError("There was an error modifying bookmark favorite flag.", e);
+            }
+        });
+    }
+
+    public static RealmAsyncTask clearFavorites(final Context context,
+                                                Realm realm,
+                                                final Callbacks.OperationCallback<Void> callback) {
+        return realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                List<Bookmark> favorites = realm.where(Bookmark.class)
+                        .equalTo(Bookmark.FIELD_FAVORITE, true)
+                        .findAll();
+                for (Bookmark bmFavorite : favorites) {
+                    bmFavorite.setFavorite(false);
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess(null);
+                WidgetUtils.updateFavWidgets(context);
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable e) {
+                callback.onError("There was an error modifying bookmarks favorite flag.", e);
+            }
+        });
+    }
+
+    public static RealmAsyncTask markSmartFavorites(final Context context,
+                                                    Realm realm,
+                                                    final Callbacks.OperationCallback<Void> callback) {
+        return realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                List<Bookmark> bookmarks = realm.where(Bookmark.class).findAll();
+                List<Bookmark> clickedBookmarks = new ArrayList<Bookmark>();
+                for (Bookmark bm : bookmarks) {
+                    if (bm.getClickCounter() > 0) {
+                        clickedBookmarks.add(bm);
+                    }
+                }
+                Collections.sort(clickedBookmarks, new BookmarkClicksComparator());
+                for (int i = 0; i < clickedBookmarks.size() && i < 10; i++) {
+                    Bookmark bm = clickedBookmarks.get(i);
+                    bm.setFavorite(true);
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess(null);
+                WidgetUtils.updateFavWidgets(context);
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable e) {
+                callback.onError("There was an error modifying bookmarks favorite flag.", e);
+            }
+        });
+    }
+
+    public static RealmAsyncTask incrementClickCounter(final Context context,
+                                                       Realm realm,
+                                                       final String bookmarkId,
+                                                       final Callbacks.OperationCallback<Void> callback) {
+        return realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Bookmark bookmark = realm.where(Bookmark.class)
+                        .equalTo(Bookmark.FIELD_ID, bookmarkId)
+                        .findFirst();
+                bookmark.incrementClickCounter();
+                // if smart favorites, check if it has to modify favorite list
+                if (PreferencesUtils.getSmartFavoritesFlag(context) && !bookmark.isFavorite()) {
+                    List<Bookmark> favorites = realm.where(Bookmark.class)
+                                                    .equalTo(Bookmark.FIELD_FAVORITE, true)
+                                                    .findAll();
+                    if (favorites.size() < 10) {
+                        bookmark.setFavorite(true);
+                    } else {
+                        for (Bookmark bm : favorites) {
+                            if (bm.getClickCounter() < bookmark.getClickCounter()) {
+                                bm.setFavorite(false);
+                                bookmark.setFavorite(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                callback.onSuccess(null);
+                WidgetUtils.updateFavWidgets(context);
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable e) {
+                callback.onError("There was an error incrementing bookmark click counter.", e);
             }
         });
     }

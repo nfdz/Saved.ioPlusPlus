@@ -38,6 +38,8 @@ public class Bookmark extends RealmObject {
 
     private boolean mIsFavorite;
 
+    private int mClickCounter;
+
     public void setId(String id) {
         mId = id;
     }
@@ -66,6 +68,14 @@ public class Bookmark extends RealmObject {
         mIsFavorite = isFavorite;
     }
 
+    public void setClickCounter(int clickCounter) {
+        mClickCounter = clickCounter;
+    }
+
+    public void incrementClickCounter() {
+        setClickCounter(mClickCounter + 1);
+    }
+
     public String getId() {
         return mId;
     }
@@ -92,5 +102,9 @@ public class Bookmark extends RealmObject {
 
     public boolean isFavorite() {
         return mIsFavorite;
+    }
+
+    public int getClickCounter() {
+        return mClickCounter;
     }
 }
