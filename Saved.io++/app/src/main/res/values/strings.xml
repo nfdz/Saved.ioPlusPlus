@@ -5,6 +5,7 @@
     <string name="share_add_new_bookmark">Saved.io Add new bookmark</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
 
     <!-- Strings related to favorites widget -->
     <string name="title_widget_favorites">Saved.io++ Favorites</string>
@@ -72,9 +73,9 @@
     <string name="pref_sort_label">Sort by</string>
     <string name="pref_sort_key" translatable="false">sort</string>
 
-    <string name="pref_sort_date_last_label">Date (last first)</string>
+    <string name="pref_sort_date_last_label">Date (new to old)</string>
     <string name="pref_sort_date_last_key" translatable="false">sort-date-last</string>
-    <string name="pref_sort_date_old_label">Date (oldest first)</string>
+    <string name="pref_sort_date_old_label">Date (old to new)</string>
     <string name="pref_sort_date_old_key" translatable="false">sort-date-old</string>
     <string name="pref_sort_title_label">Title</string>
     <string name="pref_sort_title_key" translatable="false">sort-title</string>

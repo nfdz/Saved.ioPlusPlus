@@ -9,7 +9,6 @@ Android application for the bookmarking tool https://saved.io/
 ## TODO
 
 * Implement export/import all feature.
-* Implement search feature.
 * Replace warning intro slide with a privacy and open source one.
 
 ## 3rd party software
@@ -20,7 +19,8 @@ Android application for the bookmarking tool https://saved.io/
 * [Google gson](https://github.com/google/gson)
 * [Retrofit](https://github.com/square/retrofit)
 * [Firebase JobDispatcher](https://github.com/firebase/firebase-jobdispatcher-android)
-* [AppIntro](https://github.com/apl-devs/AppIntro)
+* [AppIntro](https://github.com/apl-devs/AppIntro)ç
+* [MaterialSearchBar](https://github.com/mancj/MaterialSearchBar)
 
 ## License
 

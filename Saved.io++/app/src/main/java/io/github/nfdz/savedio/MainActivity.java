@@ -4,6 +4,7 @@
 package io.github.nfdz.savedio;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -27,6 +28,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -35,6 +37,8 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.List;
 
@@ -93,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements
     @BindView(R.id.drawer_layout_main) DrawerLayout mDrawerLayout;
     @BindView(R.id.nv_main_menu_list) ListView mNavigationListView;
     @BindView(R.id.switch_main_content) Switch mContentSwitch;
+    @BindView(R.id.search_view) MaterialSearchView mSearchView;
 
     private ActionBarDrawerToggle mToggleNav;
     private BookmarksAdapter mBookmarksAdapter;
@@ -144,6 +149,9 @@ public class MainActivity extends AppCompatActivity implements
 
         mListsAdaper = new ListsAdapter(this, null);
         mNavigationListView.setAdapter(mListsAdaper);
+
+        mSearchView.setVoiceSearch(false);
+        mSearchView.setOnQueryTextListener(new SearchListener());
 
         SyncUtils.initialize(this, mRealm);
 
@@ -232,6 +240,8 @@ public class MainActivity extends AppCompatActivity implements
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else if (mSearchView.isSearchOpen()) {
+            mSearchView.closeSearch();
         } else {
             super.onBackPressed();
         }
@@ -240,7 +250,26 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        mSearchView.setMenuItem(item);
         return true;
+    }
+
+    private class SearchListener implements MaterialSearchView.OnQueryTextListener {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            // just hide keyboard
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            Log.d(TAG, "onQueryTextChange=" + newText);
+            mBookmarksAdapter.setFilter(newText);
+            return true;
+        }
     }
 
     private void updateComparator(String sort) {

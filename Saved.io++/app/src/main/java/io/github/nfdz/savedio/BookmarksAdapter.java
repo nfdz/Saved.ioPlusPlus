@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +33,17 @@ import io.realm.RealmResults;
  */
 public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.BookmarksViewHolder> {
 
+    public static final String NO_FILTER = null;
+
     private final Context mContext;
     private final BookmarkOnClickHandler mClickHandler;
     private final DataChangesListener mChangesListener;
     private final List<Bookmark> mSortedData;
+    private final List<Bookmark> mFilteredData;
 
     private RealmResults<Bookmark> mData;
     private Comparator<Bookmark> mComparator;
+    private String mFilter;
 
     /**
      * The interface to be implemented to receive on click events.
@@ -59,7 +64,9 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
         mContext = context;
         mClickHandler = clickHandler;
         mSortedData = new ArrayList<>();
+        mFilteredData = new ArrayList<>();
         mChangesListener = new DataChangesListener();
+        mFilter = NO_FILTER;
     }
 
     public void swapData(RealmResults<Bookmark> data) {
@@ -69,16 +76,39 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
         if (mData != null) {
             mData.addChangeListener(mChangesListener);
             mSortedData.addAll(mData);
-            // TODO: perform this in a background thread
-            if (mComparator != null) Collections.sort(mSortedData, mComparator);
+            sort();
+            filter();
         }
         notifyDataSetChanged();
     }
 
-    public void setComparator(Comparator<Bookmark> comparator) {
+    private void sort() {
         // TODO: perform this in a background thread
-        mComparator = comparator;
         if (mComparator != null) Collections.sort(mSortedData, mComparator);
+    }
+
+    private void filter() {
+        mFilteredData.clear();
+        if (mFilter != NO_FILTER) {
+            for (Bookmark bm : mSortedData) {
+                if (bm.getTitle().toLowerCase().contains(mFilter)) {
+                    mFilteredData.add(bm);
+                }
+            }
+        } else {
+            mFilteredData.addAll(mSortedData);
+        }
+    }
+
+    public void setComparator(Comparator<Bookmark> comparator) {
+        mComparator = comparator;
+        sort();
+        notifyDataSetChanged();
+    }
+
+    public void setFilter(String filter) {
+        mFilter = TextUtils.isEmpty(filter) ? NO_FILTER : filter.toLowerCase();
+        filter();
         notifyDataSetChanged();
     }
 
@@ -93,7 +123,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
 
     @Override
     public void onBindViewHolder(BookmarksViewHolder holder, int position) {
-        Bookmark bookmark = mSortedData.get(position);
+        Bookmark bookmark = mFilteredData.get(position);
         holder.mBookmarkName.setText(bookmark.getTitle());
         Drawable favoriteDrawable = bookmark.isFavorite() ?
                 ContextCompat.getDrawable(mContext, R.drawable.ic_favorite_on)
@@ -118,7 +148,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
 
     @Override
     public int getItemCount() {
-        return mSortedData.size();
+        return mFilteredData.size();
     }
 
     private class DataChangesListener implements RealmChangeListener<RealmResults<Bookmark>> {
@@ -126,7 +156,8 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
         public void onChange(RealmResults<Bookmark> element) {
             mSortedData.clear();
             mSortedData.addAll(element);
-            if (mComparator != null) Collections.sort(mSortedData, mComparator);
+            sort();
+            filter();
             notifyDataSetChanged();
         }
     }
@@ -153,7 +184,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
                 @Override
                 public void onClick(View v) {
                     int adapterPosition = getAdapterPosition();
-                    Bookmark bookmark = mSortedData.get(adapterPosition);
+                    Bookmark bookmark = mFilteredData.get(adapterPosition);
                     if (mClickHandler != null) mClickHandler.onFavoriteClick(bookmark);
                 }
             });
@@ -162,7 +193,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
                 @Override
                 public void onClick(View v) {
                     int adapterPosition = getAdapterPosition();
-                    Bookmark bookmark = mSortedData.get(adapterPosition);
+                    Bookmark bookmark = mFilteredData.get(adapterPosition);
                     if (mClickHandler != null) mClickHandler.onBookmarkClick(bookmark);
                 }
             });
@@ -171,7 +202,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
                 @Override
                 public boolean onLongClick(View v) {
                     int adapterPosition = getAdapterPosition();
-                    Bookmark bookmark = mSortedData.get(adapterPosition);
+                    Bookmark bookmark = mFilteredData.get(adapterPosition);
                     if (mClickHandler != null) mClickHandler.onLongBookmarkClick(bookmark);
                     return true;
                 }
