@@ -89,5 +89,4 @@ public class SyncUtils {
 
         dispatcher.schedule(syncJob);
     }
-
 }
