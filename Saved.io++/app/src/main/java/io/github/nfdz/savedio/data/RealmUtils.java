@@ -13,12 +13,16 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.github.nfdz.savedio.Callbacks;
+import io.github.nfdz.savedio.R;
 import io.github.nfdz.savedio.model.Bookmark;
 import io.github.nfdz.savedio.model.BookmarkClicksComparator;
 import io.github.nfdz.savedio.model.BookmarkList;
+import io.github.nfdz.savedio.model.serialization.BookmarkSerializer;
+import io.github.nfdz.savedio.model.serialization.SerializationException;
 import io.github.nfdz.savedio.widget.WidgetUtils;
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
+import io.realm.RealmResults;
 
 /**
  * This class contains static methods to ease work with realm persistence.
@@ -295,6 +299,42 @@ public class RealmUtils {
             @Override
             public void onError(Throwable e) {
                 callback.onError("There was an error modifying list notify flag.", e);
+            }
+        });
+    }
+
+    public static RealmAsyncTask getSerializedBookmarks(Realm realm,
+                                                        final Context context,
+                                                        final Callbacks.OperationCallback<String> callback) {
+        final AtomicReference<String> serializedBookmarks = new AtomicReference();
+        final AtomicReference<SerializationException> ex = new AtomicReference();
+        return realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Bookmark> bookmarks = realm.where(Bookmark.class).findAll();
+                try {
+                    serializedBookmarks.set(BookmarkSerializer.serialize(bookmarks));
+                } catch (SerializationException e) {
+                    ex.set(e);
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                if (!TextUtils.isEmpty(serializedBookmarks.get())) {
+                    callback.onSuccess(serializedBookmarks.get());
+                } else {
+                    if (ex.get() != null) {
+                        callback.onError(context.getString(ex.get().getMessageId()), ex.get());
+                    } else {
+                        callback.onError(context.getString(R.string.serialize_empty_error), new Throwable());
+                    }
+                }
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable e) {
+                callback.onError(context.getString(R.string.serialize_error), e);
             }
         });
     }

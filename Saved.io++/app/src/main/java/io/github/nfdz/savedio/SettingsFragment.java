@@ -3,7 +3,9 @@
  */
 package io.github.nfdz.savedio;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
@@ -16,12 +18,57 @@ import android.util.Log;
 import io.github.nfdz.savedio.data.PreferencesUtils;
 import io.github.nfdz.savedio.data.RealmUtils;
 import io.github.nfdz.savedio.sync.SyncUtils;
+import io.github.nfdz.savedio.utils.ImportExportUtils;
 import io.realm.Realm;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private final static String TAG = SettingsFragment.class.getSimpleName();
+
+    private Realm mRealm;
+
+    @Override
+    public void onCreatePreferences(Bundle bundle, String s) {
+        // Add 'general' preferences, defined in the XML file
+        addPreferencesFromResource(R.xml.pref_general);
+
+        SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
+        PreferenceScreen prefScreen = getPreferenceScreen();
+        int count = prefScreen.getPreferenceCount();
+        for (int i = 0; i < count; i++) {
+            Preference p = prefScreen.getPreference(i);
+            if (shouldSetSummary(p)) {
+                String value = sharedPreferences.getString(p.getKey(), "");
+                setPreferenceSummary(p, value);
+            }
+        }
+
+        Preference importPref = findPreference(getString(R.string.pref_import_key));
+        Preference exportPref = findPreference(getString(R.string.pref_export_key));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            importPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ImportExportUtils.importBookmarks(SettingsFragment.this);
+                    return true;
+                }
+            });
+            exportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ImportExportUtils.exportBookmarks(SettingsFragment.this);
+                    return true;
+                }
+            });
+        } else {
+            importPref.setSummary(R.string.pref_import_summary_unavailable);
+            importPref.setEnabled(false);
+            exportPref.setSummary(R.string.pref_export_summary_unavailable);
+            exportPref.setEnabled(false);
+        }
+    }
 
     private void setPreferenceSummary(Preference preference, Object value) {
         String stringValue = value.toString();
@@ -39,25 +86,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
-        // Add 'general' preferences, defined in the XML file
-        addPreferencesFromResource(R.xml.pref_general);
-
-        SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
-        PreferenceScreen prefScreen = getPreferenceScreen();
-        int count = prefScreen.getPreferenceCount();
-        for (int i = 0; i < count; i++) {
-            Preference p = prefScreen.getPreference(i);
-            if (shouldSetSummary(p)) {
-                String value = sharedPreferences.getString(p.getKey(), "");
-                setPreferenceSummary(p, value);
-            }
-        }
-    }
-
     private boolean shouldSetSummary(Preference p) {
-        return !(p instanceof CheckBoxPreference) && !p.getKey().equals(getString(R.string.pref_api_key));
+        return !(p instanceof CheckBoxPreference) &&
+                !p.getKey().equals(getString(R.string.pref_api_key)) &&
+                !p.getKey().equals(getString(R.string.pref_export_key)) &&
+                !p.getKey().equals(getString(R.string.pref_import_key));
     }
 
     @Override
@@ -75,6 +108,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Realm.init(getContext());
+        mRealm = Realm.getDefaultInstance();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pref_sort_key))) {
             // nothing to do
@@ -83,15 +129,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                 SyncUtils.startImmediateSync(getContext());
             }
         } else if (key.equals(getString(R.string.pref_smart_key))) {
-            Realm realm = null;
-            try {
-                Realm.init(getContext());
-                realm = Realm.getDefaultInstance();
-                boolean smartFavs = sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_smart_default));
-                updateFavorites(realm, smartFavs);
-            } finally {
-                if (realm != null) realm.close();
-            }
+            boolean smartFavs = sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_smart_default));
+            updateFavorites(mRealm, smartFavs);
         }
 
         Preference preference = findPreference(key);
@@ -124,5 +163,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                 Log.i(TAG, "There was an error clearing favorites. " + msg, th);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (!ImportExportUtils.onImportActivityResult(requestCode, resultCode, resultData, mRealm, getContext()) &&
+            !ImportExportUtils.onExportActivityResult(requestCode, resultCode, resultData, mRealm, getContext())) {
+            super.onActivityResult(requestCode, resultCode, resultData);
+        }
     }
 }

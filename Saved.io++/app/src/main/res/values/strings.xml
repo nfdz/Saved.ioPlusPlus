@@ -83,6 +83,32 @@
 
     <!-- Strings related to Settings -->
 
+    <!-- Import/Export settings -->
+    <string name="pref_import_title">Import</string>
+    <string name="pref_import_summary">Import bookmarks from an exported file</string>
+    <string name="pref_import_summary_unavailable">This feature is not available (Android KitKat or higher version is required)</string>
+    <string name="pref_import_key" translatable="false">import</string>
+    <string name="pref_export_title">Export</string>
+    <string name="pref_export_summary">Export bookmarks to a file</string>
+    <string name="pref_export_summary_unavailable">This feature is not available (Android KitKat or higher version is required)</string>
+    <string name="pref_export_key" translatable="false">export</string>
+    <!-- Import/Export messages -->
+    <string name="serialize_json_error">There was an error serializing a bookmark. </string>
+    <string name="deserialize_json_error">There was an error deserializing a bookmark. </string>
+    <string name="deserialize_json_array_error">There was an error deserializing bookmarks. </string>
+    <string name="serialize_empty_error">There is no bookmarks to store. </string>
+    <string name="deserialize_empty_error">There is no stored bookmarks. </string>
+    <string name="serialize_error">There was an error serializing bookmarks. </string>
+    <string name="file_error">There was an error selecting file. </string>
+    <string name="export_error_format">There was an error exporting bookmarks. %s</string>
+    <string name="export_success">Bookmarks exported successfully. </string>
+    <string name="export_error_writing">There was an error writing file. </string>
+    <string name="import_error_format">There was an error importing bookmarks. %s</string>
+    <string name="import_error_empty">The file is empty. </string>
+    <string name="import_error_reading">There was an error reading file. </string>
+    <string name="import_success">All bookmarks imported successfully. </string>
+    <string name="import_success_incomplete">Bookmarks imported successfully (some bookmarks could not be imported). </string>
+
     <!-- Sort settings -->
     <string name="pref_sort_label">Sort by</string>
     <string name="pref_sort_key" translatable="false">sort</string>

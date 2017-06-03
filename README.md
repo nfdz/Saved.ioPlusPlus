@@ -1,6 +1,6 @@
 # Saved.io++
 
-Android application for the bookmarking tool https://saved.io/
+Android application bookmarking tool. It can work completely offline and online with https://saved.io/ service.
 
 <p align="center">
   <img src="dev/logo.png?raw=true" alt="Saved.io++"/>
@@ -8,7 +8,7 @@ Android application for the bookmarking tool https://saved.io/
 
 ## TODO
 
-* Implement export/import all feature.
+* Implement filter for export/import feature.
 
 ## 3rd party software
 

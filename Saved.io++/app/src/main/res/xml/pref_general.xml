@@ -1,5 +1,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <Preference
+        android:title="@string/pref_import_title"
+        android:key="@string/pref_import_key"
+        android:summary="@string/pref_import_summary"/>
+
+    <Preference
+        android:title="@string/pref_export_title"
+        android:key="@string/pref_export_key"
+        android:summary="@string/pref_export_summary"/>
+
     <CheckBoxPreference
         android:title="@string/pref_smart_label"
         android:key="@string/pref_smart_key"
