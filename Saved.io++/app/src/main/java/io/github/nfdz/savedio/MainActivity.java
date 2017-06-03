@@ -300,12 +300,16 @@ public class MainActivity extends AppCompatActivity implements
         switch (mSelectedContent) {
             case LIST_CONTENT:
                 mContentName.setText(mSelectedList);
-                BookmarkList list = mRealm.where(BookmarkList.class)
-                        .equalTo(BookmarkList.FIELD_LIST_NAME, mSelectedList)
-                        .findFirst();
-                if (list != null) {
-                    mContentSwitch.setChecked(list.getNotifyFlag());
-                    mContentSwitch.setVisibility(View.VISIBLE);
+                if (!TextUtils.isEmpty(PreferencesUtils.getUserAPIKey(this))) {
+                    BookmarkList list = mRealm.where(BookmarkList.class)
+                            .equalTo(BookmarkList.FIELD_LIST_NAME, mSelectedList)
+                            .findFirst();
+                    if (list != null) {
+                        mContentSwitch.setChecked(list.getNotifyFlag());
+                        mContentSwitch.setVisibility(View.VISIBLE);
+                    } else {
+                        mContentSwitch.setVisibility(View.GONE);
+                    }
                 } else {
                     mContentSwitch.setVisibility(View.GONE);
                 }
@@ -613,7 +617,9 @@ public class MainActivity extends AppCompatActivity implements
                 }
             });
         } else if (key.equals(getString(R.string.pref_api_key))) {
+            // update components that could be different in offline and online mode
             mSwipeRefresh.setEnabled(!TextUtils.isEmpty(PreferencesUtils.getUserAPIKey(this)));
+            updateInfoLayout();
         }
     }
 
