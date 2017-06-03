@@ -148,6 +148,15 @@ public class RealmUtils {
         });
     }
 
+    /**
+     * Sets given bookmark favorite flag with the given one asynchronously.
+     * @param context
+     * @param realm
+     * @param bookmarkId
+     * @param isFavorite
+     * @param callback
+     * @return realm async task.
+     */
     public static RealmAsyncTask setFavorite(final Context context,
                                              Realm realm,
                                              final String bookmarkId,
@@ -175,6 +184,13 @@ public class RealmUtils {
         });
     }
 
+    /**
+     * Sets all stored bookmarks favorite flag to false asynchronously.
+     * @param context
+     * @param realm
+     * @param callback
+     * @return realm async task.
+     */
     public static RealmAsyncTask clearFavorites(final Context context,
                                                 Realm realm,
                                                 final Callbacks.OperationCallback<Void> callback) {
@@ -202,6 +218,13 @@ public class RealmUtils {
         });
     }
 
+    /**
+     * Computes smart bookmark favorites and sets its flag to true asynchronously.
+     * @param context
+     * @param realm
+     * @param callback
+     * @return realm async task.
+     */
     public static RealmAsyncTask markSmartFavorites(final Context context,
                                                     Realm realm,
                                                     final Callbacks.OperationCallback<Void> callback) {
@@ -235,6 +258,15 @@ public class RealmUtils {
         });
     }
 
+    /**
+     * Increments click counter of given bookmark and sets its favorite flag to true if smart
+     * favorites is enabled and its clicks exceeds the clicks of any favorite bookmark.
+     * @param context
+     * @param realm
+     * @param bookmarkId
+     * @param callback
+     * @return realm async task.
+     */
     public static RealmAsyncTask incrementClickCounter(final Context context,
                                                        Realm realm,
                                                        final String bookmarkId,
@@ -278,6 +310,14 @@ public class RealmUtils {
         });
     }
 
+    /**
+     * Sets list notification flag of given list name asynchronously.
+     * @param realm
+     * @param listName
+     * @param notifyFlag
+     * @param callback
+     * @return realm async task.
+     */
     public static RealmAsyncTask setListNotificationFlag(Realm realm,
                                                          final String listName,
                                                          final boolean notifyFlag,
@@ -303,6 +343,13 @@ public class RealmUtils {
         });
     }
 
+    /**
+     * Retrieves and serializes all stored bookmarks asynchronously.
+     * @param realm
+     * @param context
+     * @param callback
+     * @return realm async task.
+     */
     public static RealmAsyncTask getSerializedBookmarks(Realm realm,
                                                         final Context context,
                                                         final Callbacks.OperationCallback<String> callback) {

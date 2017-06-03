@@ -12,8 +12,13 @@ public class URLUtils {
 
     private static final String PROTOCOL_SEPARATOR = "://";
 
+    /**
+     * Processes given URL to ensure that it has a valid protocol. If it has not, it will add
+     * http protocol by default.
+     * @param rawUrl
+     * @return URL
+     */
     public static String processURL(String rawUrl) {
-
         if (TextUtils.isEmpty(rawUrl)) {
             return "";
         }

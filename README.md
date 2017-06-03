@@ -6,6 +6,10 @@ Android application bookmarking tool. It can work completely offline and online 
   <img src="dev/logo.png?raw=true" alt="Saved.io++"/>
 </p>
 
+## Features
+
+## Screenshots
+
 ## TODO
 
 * Implement filter for export/import feature.

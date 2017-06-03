@@ -34,6 +34,11 @@ public class SyncUtils {
 
     private static boolean sInitialized = false;
 
+    /**
+     * Initializes all application tasks related with synchronization. It will execute only once.
+     * @param context
+     * @param realm
+     */
     synchronized public static void initialize(@NonNull final Context context, @NonNull Realm realm) {
 
         if (sInitialized) return;
@@ -52,6 +57,7 @@ public class SyncUtils {
 
         scheduleFirebaseJobDispatcherSync(context);
 
+        // check if it is necessary to perform synchronization now
         PreferencesUtils.retrieveLastSyncTime(context, new Callbacks.FinishCallback<Long>() {
             @Override
             public void onFinish(Long lastSync) {
@@ -66,6 +72,10 @@ public class SyncUtils {
         });
     }
 
+    /**
+     * Starts synchronization service immediately.
+     * @param context
+     */
     public static void startImmediateSync(@NonNull final Context context) {
         Intent intentToSync = new Intent(context, SyncIntentService.class);
         context.startService(intentToSync);

@@ -10,6 +10,9 @@ import io.github.nfdz.savedio.sync.api.SavedioAPI;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * This class helps to manage retrofit API object.
+ */
 public class APIHelper {
 
     private static final String BASE_URL = "http://devapi.saved.io/";

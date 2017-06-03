@@ -20,6 +20,11 @@ public class NotificationUtils {
 
     private static final int BOOKMARK_LIST_NOTIFICATION_ID = 2468;
 
+    /**
+     * Notifies to user one notification with information about updates in given lists.
+     * @param context
+     * @param listsToNotify
+     */
     public static void notifyListChanges(Context context, List<String> listsToNotify) {
         if (listsToNotify.isEmpty()) return;
         String notificationTitle = context.getString(R.string.app_name);

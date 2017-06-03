@@ -13,8 +13,15 @@ import java.util.List;
 import io.github.nfdz.savedio.R;
 import io.github.nfdz.savedio.model.Bookmark;
 
+/** This class has methods to ease bookmark serialization. Serialization format is JSON. */
 public class BookmarkSerializer {
 
+    /**
+     * Serializes given bookmark.
+     * @param bm
+     * @return String JSON object.
+     * @throws SerializationException
+     */
     public static String serialize(Bookmark bm) throws SerializationException {
         try {
             JSONObject bmJson = new JSONObject();
@@ -28,6 +35,12 @@ public class BookmarkSerializer {
         }
     }
 
+    /**
+     * Serializes given bookmark list.
+     * @param bookmarks
+     * @return String JSON array.
+     * @throws SerializationException
+     */
     public static String serialize(List<Bookmark> bookmarks) throws SerializationException {
         if (bookmarks.isEmpty()) {
             throw new SerializationException(R.string.serialize_empty_error);
@@ -39,6 +52,12 @@ public class BookmarkSerializer {
         return array.toString();
     }
 
+    /**
+     * Deserializes given bookmark.
+     * @param serializedBm
+     * @return Bookmark (it is not a realm object)
+     * @throws SerializationException
+     */
     public static Bookmark deserializeBookmark(String serializedBm) throws SerializationException {
         try {
             JSONObject bmJson = new JSONObject(serializedBm);
@@ -53,6 +72,12 @@ public class BookmarkSerializer {
         }
     }
 
+    /**
+     * Deserializes given bookmarks.
+     * @param serializedBms
+     * @return List of Bookmark (it is not a realm object)
+     * @throws SerializationException
+     */
     public static List<Bookmark> deserializeBookmarks(String serializedBms) throws SerializationException {
         try {
             List<Bookmark> bookmarks = new ArrayList<>();
@@ -61,7 +86,6 @@ public class BookmarkSerializer {
             if (length <= 0) {
                 throw new SerializationException(R.string.deserialize_empty_error);
             }
-            String[] sizes = new String[length];
             for (int i = 0; i < length; i++) {
                 bookmarks.add(deserializeBookmark(array.getString(i)));
             }

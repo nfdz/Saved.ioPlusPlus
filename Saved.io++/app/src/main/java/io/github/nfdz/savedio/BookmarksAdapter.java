@@ -103,6 +103,7 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Book
     public void setComparator(Comparator<Bookmark> comparator) {
         mComparator = comparator;
         sort();
+        filter();
         notifyDataSetChanged();
     }
 

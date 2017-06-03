@@ -3,6 +3,9 @@
  */
 package io.github.nfdz.savedio.sync;
 
+/**
+ * Custom exception that contains any error that could happens while synchronization.
+ */
 public class SyncException extends Exception {
     static final long serialVersionUID = 1L;
 

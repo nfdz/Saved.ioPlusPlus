@@ -3,11 +3,13 @@
  */
 package io.github.nfdz.savedio.utils;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.provider.DocumentFile;
 import android.util.Log;
@@ -39,6 +41,11 @@ public class ImportExportUtils {
     private static final String SUGGESTED_NAME_FORMAT = "Bookmarks-%s.savediopp";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
+    /**
+     * This method starts open document system activity.
+     * @param fm
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static void importBookmarks(Fragment fm) {
         // choose a file via the system's file browser
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
@@ -140,6 +147,11 @@ public class ImportExportUtils {
         }
     }
 
+    /**
+     * This method starts create document system activity.
+     * @param fm
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static void exportBookmarks(Fragment fm) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
 

@@ -5,6 +5,9 @@ package io.github.nfdz.savedio.model;
 
 import java.util.Comparator;
 
+/**
+ * Title comparator. The order is alphabetical.
+ */
 public class BookmarkTitleComparator implements Comparator<Bookmark> {
     @Override
     public int compare(Bookmark bookmark1, Bookmark bookmark2) {
