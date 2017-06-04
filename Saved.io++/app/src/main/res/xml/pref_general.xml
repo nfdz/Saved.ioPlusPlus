@@ -1,5 +1,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <ListPreference
+        android:title="@string/pref_sort_label"
+        android:key="@string/pref_sort_key"
+        android:defaultValue="@string/pref_sort_default"
+        android:entryValues="@array/pref_sort_values_key"
+        android:entries="@array/pref_sort_values_label" />
+
+    <CheckBoxPreference
+        android:title="@string/pref_smart_label"
+        android:key="@string/pref_smart_key"
+        android:defaultValue="@bool/pref_smart_default"
+        android:summaryOff="@string/pref_smart_sum_off"
+        android:summaryOn="@string/pref_smart_sum_on" />
+
     <Preference
         android:title="@string/pref_import_title"
         android:key="@string/pref_import_key"
@@ -9,20 +23,6 @@
         android:title="@string/pref_export_title"
         android:key="@string/pref_export_key"
         android:summary="@string/pref_export_summary"/>
-
-    <CheckBoxPreference
-        android:title="@string/pref_smart_label"
-        android:key="@string/pref_smart_key"
-        android:defaultValue="@bool/pref_smart_default"
-        android:summaryOff="@string/pref_smart_sum_off"
-        android:summaryOn="@string/pref_smart_sum_on" />
-
-    <ListPreference
-        android:title="@string/pref_sort_label"
-        android:key="@string/pref_sort_key"
-        android:defaultValue="@string/pref_sort_default"
-        android:entryValues="@array/pref_sort_values_key"
-        android:entries="@array/pref_sort_values_label" />
 
     <EditTextPreference
         android:title="@string/pref_api_label"

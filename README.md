@@ -39,7 +39,7 @@ Android application bookmarking tool. It can work completely offline and online 
 * [Google gson](https://github.com/google/gson)
 * [Retrofit](https://github.com/square/retrofit)
 * [Firebase JobDispatcher](https://github.com/firebase/firebase-jobdispatcher-android)
-* [AppIntro](https://github.com/apl-devs/AppIntro)ç
+* [AppIntro](https://github.com/apl-devs/AppIntro)
 * [MaterialSearchBar](https://github.com/mancj/MaterialSearchBar)
 * [Timber](https://github.com/JakeWharton/timber)
 
