@@ -1,0 +1,125 @@
+<resources>
+    <string name="share_add_new_bookmark">Saved.io Añadir nuevo marcador</string>
+
+    <string name="action_settings">Configuración</string>
+    <string name="action_search">Buscar</string>
+
+    <!-- Strings related to favorites widget -->
+    <string name="title_widget_favorites">Saved.io++ Marcadores Favoritos</string>
+    <string name="empty_favorites_list">No hay marcadores favoritos</string>
+
+    <!-- Strings related to introduction activity -->
+    <string name="intro_done_button">Ok</string>
+
+    <string name="intro_warning_title">¡Hola!</string>
+    <string name="intro_warning_msg">Esta aplicación respeta tu privacidad. Es software libre (GPLv3)
+        y su código es público. Siéntete libre de echar un vistazo en Github. \n\n
+        En la versión actual hay un problema con las listas en el modo online porque Saved.io no provee
+        información de las listas disponibles. Por lo tanto, si creas un marcador dentro de una lista
+        desde la web, éste aparecerá como sin lista en la aplicación.</string>
+    <string name="intro_warning_apologies">Lo siento :(</string>
+
+    <string name="intro_instructions_title">Instrucciones</string>
+    <string name="intro_instructions_offline_title">Offline</string>
+    <string name="intro_instructions_offline_content">Clica OK para empezar a usar la aplicación</string>
+    <string name="intro_instructions_online_title">Online</string>
+    <string name="intro_instructions_web_register_button">Regístrate</string>
+    <string name="intro_instructions_web_api_button">Obtén tu clave del API</string>
+    <string name="intro_instructions_web_button_unable_format" formatted="false">No se puede abrir %s</string>
+    <string name="intro_instructions_settings_button">Configura tu clave del API</string>
+
+    <!-- Strings related to notifications -->
+    <string name="notification_list_format_long" formatted="false">La lista de marcadores %s tiene nuevos cambios.</string>
+    <string name="notification_list_format_short" formatted="false">La lista %s cambió.</string>
+    <string name="notification_several_lists_long">Hay cambios en varias listas de marcadores.</string>
+    <string name="notification_several_lists_short">Las listas cambiaron.</string>
+
+    <!-- Strings related to sync service -->
+    <string name="sync_summary_format" formatted="false">%d eliminado, %d creado and %d actualizado.</string>
+    <string name="sync_api_error">La clave de usuario del API no es válida</string>
+    <string name="sync_network_error">Hay problemas con la conexión</string>
+    <string name="sync_service_error">Hay problemas con el servicio de marcadores online</string>
+
+    <!-- Strings related to Main activity -->
+    <string name="main_nav_drawer_open">Abrir menú de listas de marcadores</string>
+    <string name="main_nav_drawer_close">Cerrar menú de listas de marcadores</string>
+    <string name="main_menu_header_title">Lista</string>
+    <string name="main_menu_all">Todo</string>
+    <string name="main_menu_favorites">Favoritos</string>
+    <string name="main_content_favorites">@string/main_menu_favorites</string>
+    <string name="main_bookmark_deleted">Eliminado con éxito</string>
+    <string name="main_bookmark_deleted_error">Hubo un error mientras se eliminaba el marcador</string>
+    <string name="main_bookmark_deleted_undo">Deshacer</string>
+    <string name="main_bookmark_deleted_undo_error">Hubo un error deshaciendo la eliminación del marcador</string>
+    <string name="main_notify_bookmarks">Notificar cambios</string>
+    <string name="main_bookmark_unable_click">No se puede abir la URL</string>
+    <string name="main_bookmark_unable_click_search">Buscar</string>
+    <string name="main_sync_result">Resultado de la sincronización de los marcadores:</string>
+    <string name="main_dialog_search_ok">Buscar</string>
+    <string name="main_dialog_search_title">Buscar</string>
+
+
+    <!-- Strings related to bookmark form -->
+    <string name="bookmark_form_title">Título</string>
+    <string name="bookmark_form_url">URL</string>
+    <string name="bookmark_form_notes">Notas</string>
+    <string name="bookmark_form_list">Lista</string>
+    <string name="bookmark_form_optional_hint">Opcional</string>
+    <string name="bookmark_form_dialog_add_list_ok">Añadir</string>
+    <string name="bookmark_form_dialog_add_list_title">Añadir una nueva lista</string>
+    <string name="bookmark_form_dialog_select_list_title">Seleccionar una lista</string>
+    <string name="bookmark_form_create_list_error_empty">El nombre de una lista no puede estar vacío</string>
+    <string name="bookmark_form_create_list_error_chars">El nombre de una lista solo puede contener caracteres alfanuméricos (a-z y 0-9)</string>
+
+    <!-- Strings related to edit bookmark activity -->
+    <string name="edit_bookmark_button">Editar</string>
+    <string name="edit_bookmark_error">Hubo un error editando el marcador</string>
+
+    <!-- Strings related to new bookmark activity -->
+    <string name="new_bookmark_button">Crear</string>
+    <string name="new_bookmark_error">Hubo un error creando el marcador</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Import/Export settings -->
+    <string name="pref_import_title">Importar</string>
+    <string name="pref_import_summary">Importar marcadores de un archivo</string>
+    <string name="pref_import_summary_unavailable">Esta utilidad no esta diponible (se requiere una versión de Android superior a KitKat)</string>
+    <string name="pref_export_title">Exportar</string>
+    <string name="pref_export_summary">Exportar marcadores a un archivo</string>
+    <string name="pref_export_summary_unavailable">Esta utilidad no esta diponible (se requiere una versión de Android superior a KitKat)</string>
+    <!-- Import/Export messages -->
+    <string name="serialize_json_error">Hubo un error serializando un marcador. </string>
+    <string name="deserialize_json_error">Hubo un error deserializando un marcador. </string>
+    <string name="deserialize_json_array_error">Hubo un error deserializando los marcadores. </string>
+    <string name="serialize_empty_error">No hay marcadores para ser almacenados. </string>
+    <string name="deserialize_empty_error">No hay marcadores guardados. </string>
+    <string name="serialize_error">Hubo un error serializando los marcadores. </string>
+    <string name="file_error">Hubo un error seleccionando el archivo. </string>
+    <string name="export_error_format">Hubo un error exportando los marcadores. %s</string>
+    <string name="export_success">Marcadores exportados con éxito. </string>
+    <string name="export_error_writing">Hubo un error escribiendo el archivo. </string>
+    <string name="import_error_format">Hubo un error importando los marcadores. %s</string>
+    <string name="import_error_empty">El archivo esta vacío. </string>
+    <string name="import_error_reading">Hubo un error leyendo el archivo. </string>
+    <string name="import_success">Todos los marcadores han sido importados con éxito. </string>
+    <string name="import_success_incomplete">Marcadores importados parcialmente (algunos marcadores podrían no haber sido importados). </string>
+
+    <!-- Sort settings -->
+    <string name="pref_sort_label">Ordenar por</string>
+
+    <string name="pref_sort_date_last_label">Fecha (nuevo a viejo)</string>
+    <string name="pref_sort_date_old_label">Fecha (viejo a nuevo)</string>
+    <string name="pref_sort_title_label">Título</string>
+
+    <!-- User API key settings -->
+    <string name="pref_api_label">Clave de usuario del API</string>
+    <string name="pref_api_warning">Si la clave esta vacía, la aplicación funcionará en modo offline.
+        El proceso de sincronización puede eliminar los marcadores actuales.</string>
+
+    <!-- Smart favorites settings -->
+    <string name="pref_smart_label">Favoritos inteligentes</string>
+    <string name="pref_smart_sum_on">Los diez marcadores mas usados serán marcados como favoritos automáticamente.</string>
+    <string name="pref_smart_sum_off">Selecciona los marcadores favoritos clicando en el icono.</string>
+
+</resources>

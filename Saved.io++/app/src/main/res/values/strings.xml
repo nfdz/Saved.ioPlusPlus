@@ -17,8 +17,9 @@
     <string name="intro_warning_title">Hello!</string>
     <string name="intro_warning_msg">This app respects your privacy.
         It is free software (GPLv3) and its code is public. Feel free to check it on GitHub. \n\n
-        In the current version there is a problem with the lists in online mode because Saved.io does not provide the lists.
-        So if you have created a bookmark in a list from the web, it will appear as listless in the app.</string>
+        In the current version there is a problem with the lists in online mode because Saved.io does
+        not provide information about available lists. So if you have created a bookmark in a list
+        from the web, it will appear as listless in the app.</string>
     <string name="intro_warning_apologies">Sorry :(</string>
 
     <string name="intro_instructions_title">Instructions</string>
