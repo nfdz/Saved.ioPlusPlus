@@ -6,6 +6,13 @@ Android application bookmarking tool. It can work completely offline and online 
   <img src="dev/logo.png?raw=true" alt="Saved.io++"/>
 </p>
 
+## Download
+
+<p>
+  <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png?raw=true" alt="Get it on Google Play" href="https://play.google.com/store/apps/details?id=io.github.nfdz.savedio"/>
+</p>
+Google Play and the Google Play logo are trademarks of Google Inc.
+
 ## Features
 
 * Offline mode (bookmarks stored locally) and online mode (bookmarks are synchronized with saved.io)
