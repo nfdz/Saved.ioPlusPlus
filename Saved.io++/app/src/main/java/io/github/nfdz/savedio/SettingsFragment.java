@@ -13,18 +13,16 @@ import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 import android.text.TextUtils;
-import android.util.Log;
 
 import io.github.nfdz.savedio.data.PreferencesUtils;
 import io.github.nfdz.savedio.data.RealmUtils;
 import io.github.nfdz.savedio.sync.SyncUtils;
 import io.github.nfdz.savedio.utils.ImportExportUtils;
 import io.realm.Realm;
+import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-
-    private final static String TAG = SettingsFragment.class.getSimpleName();
 
     private Realm mRealm;
 
@@ -153,14 +151,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                         }
                         @Override
                         public void onError(String msg, Throwable th) {
-                            Log.i(TAG, "There was an error computing smart favorites. " + msg, th);
+                            Timber.i(th, "There was an error computing smart favorites. " + msg);
                         }
                     });
                 }
             }
             @Override
             public void onError(String msg, Throwable th) {
-                Log.i(TAG, "There was an error clearing favorites. " + msg, th);
+                Timber.i(th, "There was an error clearing favorites. " + msg);
             }
         });
     }

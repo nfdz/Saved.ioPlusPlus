@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +31,7 @@ import io.github.nfdz.savedio.utils.BookmarkFormUtils;
 import io.github.nfdz.savedio.utils.TasksUtils;
 import io.github.nfdz.savedio.utils.ToolbarUtils;
 import io.realm.Realm;
+import timber.log.Timber;
 
 /**
  * This activity shows an empty bookmark layout form and manage its creation.
@@ -44,7 +44,6 @@ public class NewBookmarkActivity extends AppCompatActivity {
     /** Valid mime type for extra data in intent */
     private static final String VALID_MIME_TYPE = "text/";
 
-    private static final String TAG = NewBookmarkActivity.class.getSimpleName();
     private static final String NO_LIST_VALUE = "-";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
@@ -145,7 +144,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
             }
             @Override
             public void onError(String msg, Throwable e) {
-                Log.e(TAG, msg, e);
+                Timber.e(e, msg);
             }
         });
     }
@@ -179,7 +178,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
 
         // check that url is ok
         if (TextUtils.isEmpty(url)) {
-            Log.e(TAG, "URL is empty when save button was clicked.");
+            Timber.e("URL is empty when save button was clicked.");
         } else {
             TasksUtils.createBookmark(this,
                     mRealm,
@@ -192,7 +191,7 @@ public class NewBookmarkActivity extends AppCompatActivity {
                         @Override
                         public void onError(String error, Throwable th) {
                             String msg = "There was an error creating a bookmark: " + bookmark + ". " + error;
-                            Log.e(TAG, msg, th);
+                            Timber.e(th, msg);
                             showContent();
                             Toast.makeText(NewBookmarkActivity.this,
                                     R.string.new_bookmark_error,

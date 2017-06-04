@@ -12,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.provider.DocumentFile;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -31,10 +30,10 @@ import io.github.nfdz.savedio.model.Bookmark;
 import io.github.nfdz.savedio.model.serialization.BookmarkSerializer;
 import io.github.nfdz.savedio.model.serialization.SerializationException;
 import io.realm.Realm;
+import timber.log.Timber;
 
 public class ImportExportUtils {
 
-    private static final String TAG = ImportExportUtils.class.getSimpleName();
     private static final int READ_REQUEST_CODE = 642;
     private static final int WRITE_REQUEST_CODE = 486;
     private static final String MIME_TYPE = "text/plain";
@@ -199,7 +198,7 @@ public class ImportExportUtils {
                                     out.write(serialized.getBytes());
                                     result = true;
                                 } catch (IOException e) {
-                                    Log.d(TAG, "There was an error writing file where to export bookmarks. ", e);
+                                    Timber.d(e, "There was an error writing file where to export bookmarks. ");
                                 } finally {
                                     if (out != null) {
                                         try {

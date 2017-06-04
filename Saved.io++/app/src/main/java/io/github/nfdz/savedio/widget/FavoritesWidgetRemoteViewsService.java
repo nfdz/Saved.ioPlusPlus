@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
-import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -31,11 +30,10 @@ import io.github.nfdz.savedio.model.BookmarkTitleComparator;
 import io.github.nfdz.savedio.utils.URLUtils;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import timber.log.Timber;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FavoritesWidgetRemoteViewsService extends RemoteViewsService {
-
-    public static final String TAG = FavoritesWidgetRemoteViewsService.class.getSimpleName();
 
     private List<Bookmark> getData() {
         Realm realm = null;
@@ -67,7 +65,7 @@ public class FavoritesWidgetRemoteViewsService extends RemoteViewsService {
             data = Collections.unmodifiableList(data);
             return data;
         } catch (Exception e) {
-            Log.e(TAG, "There was an error retrieving data for widget.", e);
+            Timber.e(e, "There was an error retrieving data for widget.");
         } finally {
             if (realm != null) realm.close();
         }

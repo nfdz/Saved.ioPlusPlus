@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,12 +27,11 @@ import io.github.nfdz.savedio.widget.WidgetUtils;
 import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class SyncIntentService extends IntentService {
 
     public static final String SERVICE_NAME = "SyncIntentService";
-
-    public static final String TAG = SyncIntentService.class.getSimpleName();
 
     public SyncIntentService() {
         super(SERVICE_NAME);
@@ -61,7 +59,7 @@ public class SyncIntentService extends IntentService {
 
     private static void syncBookmarks(Context context, Realm realm) throws SyncException {
 
-        Log.i(TAG, "Starting bookmarks synchronization.");
+        Timber.i("Starting bookmarks synchronization.");
 
         //  retrieve all bookmarks
         String devKey = BuildConfig.SAVEDIO_API_DEV_KEY;
@@ -95,7 +93,7 @@ public class SyncIntentService extends IntentService {
                         if (lastOneId != null && lastOneId.equals(newLastOneId)) {
                             exit = true;
                         } else {
-                            Log.d(TAG, "Sync bookmarks - page=" + page + " - size=" + retrievedBms.size());
+                            Timber.d("Sync bookmarks - page=" + page + " - size=" + retrievedBms.size());
                             page++;
                             allRetrievedBms.addAll(retrievedBms);
                             lastOneId = newLastOneId;
@@ -105,11 +103,11 @@ public class SyncIntentService extends IntentService {
                     }
                 } else {
                     String error = res.raw().message();
-                    Log.d(TAG, "Sync bookmarks error (page=" + page + "): " + error);
+                    Timber.d("Sync bookmarks error (page=" + page + "): " + error);
                     throw new SyncException(context.getString(R.string.sync_service_error));
                 }
             } catch (IOException e) {
-                Log.d(TAG, "Sync bookmarks error (page=" + page + "): " + e.getMessage(), e);
+                Timber.d(e, "Sync bookmarks error (page=" + page + ")");
                 throw new SyncException(context.getString(R.string.sync_network_error), e);
             }
         } while(!exit);
@@ -204,7 +202,7 @@ public class SyncIntentService extends IntentService {
         // commit data
         realm.commitTransaction();
 
-        Log.i(TAG, "Bookmarks synchronization finished correctly. " + summary);
+        Timber.i("Bookmarks synchronization finished correctly. " + summary);
 
         // save sync time in preferences
         long now = System.currentTimeMillis();

@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +30,7 @@ import io.github.nfdz.savedio.utils.BookmarkFormUtils;
 import io.github.nfdz.savedio.utils.TasksUtils;
 import io.github.nfdz.savedio.utils.ToolbarUtils;
 import io.realm.Realm;
+import timber.log.Timber;
 
 /**
  * This activity shows bookmark layout form filled with given bookmark (in intent). If user
@@ -47,8 +47,6 @@ public class EditBookmarkActivity extends AppCompatActivity {
     /** Key of the selected list in saved instance state */
     public static final String WAS_EDITED_KEY = "was-edited";
 
-
-    private static final String TAG = EditBookmarkActivity.class.getSimpleName();
     private static final String NO_LIST_VALUE = "-";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
@@ -83,7 +81,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
             mBookmarkId = getIntent().getStringExtra(BOOKMARK_ID_KEY);
         }
         if (TextUtils.isEmpty(mBookmarkId)) {
-            Log.d(TAG, "Edit bookmark activity created with null bookmark id given in intent.");
+            Timber.d("Edit bookmark activity created with null bookmark id given in intent.");
             finish();
         }
 
@@ -157,7 +155,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
             }
             @Override
             public void onError(String msg, Throwable e) {
-                Log.e(TAG, msg, e);
+                Timber.e(e, msg);
                 onSuccess(Collections.<String>emptyList());
             }
         });
@@ -181,7 +179,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
         // retrieve bookmark
         Bookmark bookmark = mRealm.where(Bookmark.class).equalTo(Bookmark.FIELD_ID, mBookmarkId).findFirst();
         if (bookmark == null) {
-            Log.d(TAG, "Edit bookmark activity created with bookmarkId=" + mBookmarkId +
+            Timber.d("Edit bookmark activity created with bookmarkId=" + mBookmarkId +
                     " cannot find bookmark object.");
             finish();
             return;
@@ -220,7 +218,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
 
         // check that url is ok
         if (TextUtils.isEmpty(url)) {
-            Log.e(TAG, "URL is empty when edit button was clicked.");
+            Timber.e("URL is empty when edit button was clicked.");
         } else {
             TasksUtils.deleteBookmark(this,
                     mRealm,
@@ -239,7 +237,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
                                         @Override
                                         public void onError(String error, Throwable th) {
                                             String msg = "There was an error editing bookmark: " + editedBookmark + ". " + error;
-                                            Log.e(TAG, msg, th);
+                                            Timber.e(th, msg);
                                             showContent();
                                             Toast.makeText(EditBookmarkActivity.this,
                                                     R.string.edit_bookmark_error,
@@ -250,7 +248,7 @@ public class EditBookmarkActivity extends AppCompatActivity {
                         @Override
                         public void onError(String error, Throwable th) {
                             String msg = "There was an error editing bookmark: " + editedBookmark + ". " + error;
-                            Log.e(TAG, msg, th);
+                            Timber.e(th, msg);
                             showContent();
                             Toast.makeText(EditBookmarkActivity.this,
                                     R.string.edit_bookmark_error,

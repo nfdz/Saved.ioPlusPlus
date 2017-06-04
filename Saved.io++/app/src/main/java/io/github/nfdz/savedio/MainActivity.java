@@ -28,7 +28,6 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,6 +64,7 @@ import io.github.nfdz.savedio.utils.URLUtils;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import timber.log.Timber;
 
 /**
  * Main activity of application. It shows a list of interactive bookmarks and has a lists navigation
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements
         SharedPreferences.OnSharedPreferenceChangeListener,
         CompoundButton.OnCheckedChangeListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int ALL_CONTENT = 0;
     private static final int FAVORITE_CONTENT = 1;
     private static final int LIST_CONTENT = 2;
@@ -276,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public boolean onQueryTextChange(String newText) {
-            Log.d(TAG, "onQueryTextChange=" + newText);
+            Timber.d("onQueryTextChange=" + newText);
             mBookmarksAdapter.setFilter(newText);
             return true;
         }
@@ -485,7 +484,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             @Override
             public void onError(String msg, Throwable th) {
-                Log.e(TAG, "There was an error incrementing bookmark click counter. " + msg, th);
+                Timber.e(th, "There was an error incrementing bookmark click counter. " + msg);
                 openBookmark();
             }
             private void openBookmark() {
@@ -541,7 +540,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 @Override
                 public void onError(String msg, Throwable th) {
-                    Log.e(TAG, msg, th);
+                    Timber.e(th, msg);
                 }
             });
         }
@@ -575,7 +574,7 @@ public class MainActivity extends AppCompatActivity implements
             }
             @Override
             public void onError(String msg, Throwable th) {
-                Log.e(TAG, msg, th);
+                Timber.e(th, msg);
                 // revert
                 mContentSwitch.setOnCheckedChangeListener(null);
                 mContentSwitch.setChecked(!isChecked);
@@ -681,7 +680,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                     @Override
                     public void onError(String msg, Throwable th) {
-                        Log.e(TAG, "There was an error deleting a bookmark: " + bookmarkId+". " + msg, th);
+                        Timber.e(th, "There was an error deleting a bookmark: " + bookmarkId+". " + msg);
                         Snackbar.make(mContent,
                                 getString(R.string.main_bookmark_deleted_error),
                                 Snackbar.LENGTH_LONG).show();
@@ -701,7 +700,7 @@ public class MainActivity extends AppCompatActivity implements
                     }
                     @Override
                     public void onError(String msg, Throwable th) {
-                        Log.e(TAG, "There was an error inserting a bookmark: " + bookmark + ". " + msg, th);
+                        Timber.e(th, "There was an error inserting a bookmark: " + bookmark + ". " + msg);
                         Snackbar.make(mContent,
                                 getString(R.string.main_bookmark_deleted_undo_error),
                                 Snackbar.LENGTH_LONG).show();
