@@ -10,7 +10,7 @@
     android:textColor="@color/white"
     android:background="@color/colorPrimary"
     android:textStyle="bold"
-    android:textSize="22sp" />
+    android:textSize="28sp" />
 
 
 

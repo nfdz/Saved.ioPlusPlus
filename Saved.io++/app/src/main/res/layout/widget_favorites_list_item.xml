@@ -31,8 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/black"
-            android:textSize="15sp"
+            style="@style/widgetBookmarkItemText"
             android:maxLines="1"
             android:ellipsize="end"
             tools:text="Bookmark Title" />

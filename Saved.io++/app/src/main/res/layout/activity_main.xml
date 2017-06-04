@@ -30,11 +30,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:gravity="center"
-                android:background="@drawable/touch_selector"
                 android:padding="14dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                style="@style/navMainListText"
                 android:text="@string/main_menu_all" />
 
             <View
@@ -47,11 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:gravity="center"
-                android:background="@drawable/touch_selector"
                 android:padding="14dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                style="@style/navMainListText"
                 android:text="@string/main_menu_favorites" />
 
             <View

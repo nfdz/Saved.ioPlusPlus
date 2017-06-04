@@ -20,9 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+            style="@style/header1IntroText"
             android:text="@string/intro_warning_title" />
 
         <TextView
@@ -31,8 +29,7 @@
             android:layout_gravity="start"
             android:layout_marginTop="20dp"
             android:textAlignment="viewStart"
-            android:textColor="@color/black"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            style="@style/introText"
             android:text="@string/intro_warning_msg" />
 
         <TextView
@@ -41,8 +38,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            style="@style/introText"
             android:text="@string/intro_warning_apologies"
             android:layout_marginBottom="60dp"/>
 

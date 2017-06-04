@@ -11,6 +11,7 @@
         android:id="@+id/pb_edit_bookmark_loading"
         android:layout_width="@dimen/loading_size"
         android:layout_height="@dimen/loading_size"
+        android:layout_marginTop="?attr/actionBarSize"
         android:layout_gravity="center"
         android:visibility="invisible"/>
 

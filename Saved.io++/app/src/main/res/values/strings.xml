@@ -45,7 +45,7 @@
     <!-- Strings related to Main activity -->
     <string name="main_nav_drawer_open">Open bookmark lists menu</string>
     <string name="main_nav_drawer_close">Close bookmark lists menu</string>
-    <string name="main_menu_header_title">Lists</string>
+    <string name="main_menu_header_title">List</string>
     <string name="main_menu_all">All</string>
     <string name="main_menu_favorites">Favorites</string>
     <string name="main_content_favorites">@string/main_menu_favorites</string>

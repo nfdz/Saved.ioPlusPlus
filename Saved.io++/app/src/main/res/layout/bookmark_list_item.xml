@@ -41,8 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="12dp"
-            android:textColor="@color/black"
-            android:textSize="17sp"
+            style="@style/bookmarkItemText"
             tools:text="Bookmark Name" />
 
 

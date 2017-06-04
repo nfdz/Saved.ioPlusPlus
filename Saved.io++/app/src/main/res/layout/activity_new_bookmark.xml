@@ -12,6 +12,7 @@
         android:layout_width="@dimen/loading_size"
         android:layout_height="@dimen/loading_size"
         android:layout_gravity="center"
+        android:layout_marginTop="?attr/actionBarSize"
         android:visibility="invisible"/>
 
     <ScrollView
