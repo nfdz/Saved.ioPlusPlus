@@ -8,7 +8,24 @@ Android application bookmarking tool. It can work completely offline and online 
 
 ## Features
 
+* Offline mode (bookmarks stored locally) and online mode (bookmarks are synchronized with saved.io)
+* Smart favorites. Ten most used bookmarks are marked as favorites automatically.
+* Search engine.
+* Widget of favorite bookmarks.
+* Import/Export from/to a file.
+
 ## Screenshots
+
+<p align="center">
+  <img src="screenshots/main.png?raw=true" width="250" alt="Main view"/>
+  <img src="screenshots/list.png?raw=true" width="250" alt="Select a list"/>
+  <img src="screenshots/selectedlist.png?raw=true" width="250" alt="Main view with selected list"/>
+</p>
+<p align="center">
+  <img src="screenshots/edit.png?raw=true" width="250" alt="Edit bookmark"/>
+  <img src="screenshots/search.png?raw=true" width="250" alt="Search feature"/>
+  <img src="screenshots/widget.png?raw=true" width="250" alt="Favorites widget"/>
+</p>
 
 ## TODO
 
