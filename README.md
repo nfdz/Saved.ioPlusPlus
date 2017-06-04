@@ -8,9 +8,9 @@ Android application bookmarking tool. It can work completely offline and online 
 
 ## Download
 
-<p href="https://play.google.com/store/apps/details?id=io.github.nfdz.savedio">
+<a href="https://play.google.com/store/apps/details?id=io.github.nfdz.savedio">
   <img width="300" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png?raw=true" alt="Get it on Google Play"/>
-</p>
+</a>
 Google Play and the Google Play logo are trademarks of Google Inc.
 
 ## Features
