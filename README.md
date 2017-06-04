@@ -36,6 +36,7 @@ Google Play and the Google Play logo are trademarks of Google Inc.
 
 ## TODO
 
+* If the user API key is invalid, notify it to the user instead of saying that "there is a problem with the service".
 * Implement filter for export/import feature.
 
 ## 3rd party software
