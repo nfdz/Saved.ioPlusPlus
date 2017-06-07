@@ -12,7 +12,7 @@ Android application bookmarking tool. It can work completely offline and online 
   <img width="250" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png?raw=true" alt="Get it on Google Play"/>
 </a></p>
 Google Play and the Google Play logo are trademarks of Google Inc.
-
+<br>
 <p align="center"><a href="https://github.com/nfdz/saved.io-plus-plus/releases">
   <img width="250" src="dev/githubBadge.png?raw=true" alt="Get it on Github"/>
 </a></p>
