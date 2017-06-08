@@ -72,7 +72,8 @@
     <string name="bookmark_form_dialog_add_list_title">Add a new list</string>
     <string name="bookmark_form_dialog_select_list_title">Select list</string>
     <string name="bookmark_form_create_list_error_empty">List name must not be empty</string>
-    <string name="bookmark_form_create_list_error_chars">List name must contains only alphabetic (a-z) and numeric (0-9) characters</string>
+    <string name="bookmark_form_create_list_error_chars">List name must contains only alphabetic (a-z), numeric (0-9) and hyphens (-) characters</string>
+    <string name="bookmark_form_create_list_error_hyphens">Hyphens (-) characters can only be in the middle of the word and there cannot be one followed by another</string>
 
     <!-- Strings related to edit bookmark activity -->
     <string name="edit_bookmark_button">Edit</string>

@@ -142,6 +142,17 @@ public class BookmarkFormUtils {
             showCreateListError(context, R.string.bookmark_form_create_list_error_chars);
             return false;
         }
+        if (!checkHyphens(listName)) {
+            showCreateListError(context, R.string.bookmark_form_create_list_error_hyphens);
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean checkHyphens(String listName) {
+        if (listName.startsWith("-")) return false;
+        if (listName.endsWith("-")) return false;
+        if (listName.contains("--")) return false;
         return true;
     }
 
@@ -149,6 +160,7 @@ public class BookmarkFormUtils {
         for (char l : listName.toCharArray()) {
             if (l >= 'a' && l <= 'z') continue;
             if (l >= '0' && l <= '9') continue;
+            if (l == '-') continue;
             return false;
         }
         return true;

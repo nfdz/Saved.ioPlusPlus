@@ -71,7 +71,8 @@
     <string name="bookmark_form_dialog_add_list_title">Añadir una nueva lista</string>
     <string name="bookmark_form_dialog_select_list_title">Seleccionar una lista</string>
     <string name="bookmark_form_create_list_error_empty">El nombre de una lista no puede estar vacío</string>
-    <string name="bookmark_form_create_list_error_chars">El nombre de una lista solo puede contener caracteres alfanuméricos (a-z y 0-9)</string>
+    <string name="bookmark_form_create_list_error_chars">El nombre de una lista solo puede contener caracteres alfanuméricos (a-z y 0-9) y guiones</string>
+    <string name="bookmark_form_create_list_error_hyphens">Los guiones (-) sólo pueden estar en mitad de una palabra y no puede haber dos seguidos</string>
 
     <!-- Strings related to edit bookmark activity -->
     <string name="edit_bookmark_button">Editar</string>
