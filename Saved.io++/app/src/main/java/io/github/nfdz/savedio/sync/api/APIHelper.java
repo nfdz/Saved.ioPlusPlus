@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class APIHelper {
 
-    private static final String BASE_URL = "http://devapi.saved.io/";
+    private static final String BASE_URL = "https://devapi.saved.io/";
 
     public final SavedioAPI mAPI;
 
