@@ -21,8 +21,8 @@ import io.github.nfdz.savedio.data.PreferencesUtils;
 
 public class IntroActivity extends AppIntro {
 
-    private static final String USER_API_KEY_WEB = "http://saved.io/key";
-    private static final String REGISTER_WEB = "http://saved.io/register";
+    private static final String USER_API_KEY_WEB = "https://saved.io/key";
+    private static final String REGISTER_WEB = "https://saved.io/register";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
