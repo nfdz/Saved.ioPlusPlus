@@ -1,3 +1,6 @@
+
+⚠️  **This project has been discontinued** ⚠️
+
 # Saved.io++
 
 Android application bookmarking tool. It can work completely offline and online with https://saved.io/ service.
@@ -8,13 +11,9 @@ Android application bookmarking tool. It can work completely offline and online 
 
 ## Download
 
-<p align="center"><a href="https://play.google.com/store/apps/details?id=io.github.nfdz.savedio">
-  <img width="250" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png?raw=true" alt="Get it on Google Play"/>
-</a></p>
 <p align="center"><a href="https://github.com/nfdz/saved.io-plus-plus/releases">
   <img width="250" src="dev/githubBadge.png?raw=true" alt="Get it on Github"/>
 </a></p>
-
 
 ## Features
 
@@ -36,11 +35,6 @@ Android application bookmarking tool. It can work completely offline and online 
   <img src="screenshots/search.png?raw=true" width="250" alt="Search feature"/>
   <img src="screenshots/widget.png?raw=true" width="250" alt="Favorites widget"/>
 </p>
-
-## TODO
-
-* If the user API key is invalid, notify it to the user instead of saying that "there is a problem with the service".
-* Implement filter for export/import feature.
 
 ## 3rd party software
 
